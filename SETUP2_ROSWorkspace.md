@@ -146,7 +146,9 @@ You will need sudo access to complete this step.
      Otherwise, make sure to source ~/catkin_ws/devel/setup.bash on every new shell that you want
      to use to work with ROS. Sourcing setup.bash from your devel space will ensure that ROS 
      can work properly with the code that you've added to and built in ~/catkin_ws.
-                  
 
-At this point, you are done setting up your ROS workspace. If you want to know more about catkin workspaces, check out this [page](http://wiki.ros.org/catkin/workspaces). Importantly, note that the `catkin_make` command generated a `build` directory when it compiled the code in your `src` folder. This `build` directory has intermediary build files needed during the compilation process and you can delete it to recompile everything from scratch if you ever want to. 
+    > Note that the `catkin_make` command generated a `build` directory when it compiled the code in your `src` folder. This `build` directory has intermediary build files needed during the compilation process to generate the executables and libraries in the `devel` folder. 
+    If you ever need to, you can delete the `build` and `devel` folders and re-run `catkin_make` within `catkin_ws` to recompile everything from scratch.                
+
+At this point, you are done setting up your ROS workspace. If you want to know more about catkin workspaces, check out this [page](http://wiki.ros.org/catkin/workspaces). 
 
