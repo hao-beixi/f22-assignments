@@ -250,7 +250,7 @@ of the 4 joints in the robot as follows:
     5. `wrist_link`, which allows the head to tilt.
 
     The above 5 links make up the kinematic chain of the robot. You can visualize the frames as in the picture above in RViz by adding a [tf Display](http://wiki.ros.org/rviz/DisplayTypes/TF)
-    and then selecting the corresponding frames in the tf submenu.
+    and then selecting the corresponding frames in the tf submenu. If the MoveIt visualization handles are distracting, you can turn them off by deselecting "MotionPlanning" in the left window within RViz with all of the current displays.
 
 
 5. Finally, use [rqt_graph](http://wiki.ros.org/rqt_graph) to visualize the 
