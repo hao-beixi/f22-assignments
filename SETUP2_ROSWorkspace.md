@@ -134,7 +134,7 @@ You will need sudo access to complete this step.
     $ catkin_make -DCMAKE_BUILD_TYPE=Release
     ```
 
-    Now you should have a devel space in `~/catkin_ws/devel`, which contains its own setup.bash file.
+    Now you should have a devel space in `~/catkin_ws/devel`, which contains its own `setup.sh` file.
     Sourcing this file will `overlay` the install space onto your environment. 
     
     > Overlaying refers to building and using a ROS package from source on top of an existing version
@@ -148,10 +148,5 @@ You will need sudo access to complete this step.
      can work properly with the code that you've added to and built in ~/catkin_ws.
                   
 
-At this point, you are done setting up your ROS workspace. If you want to know more about catkin workspaces, check out this [page](http://wiki.ros.org/catkin/workspaces). Importantly, note that the `catkin_make` command generated a `build` directory when it compiled the code in your `src` folder. This `build` directory has intermediary build files needed during the compilation process and you can delete it to recompile everything from scratch if you ever want to. Also, don't forget to source your `catkin_ws/devel/setup.sh` script whenever you are working with your ROS workspace. You can do this automatically by adding a line to your `~/.bashrc` file. For example, if your home folder is `/home/netid`, then add the following line to your `.bashrc`:
+At this point, you are done setting up your ROS workspace. If you want to know more about catkin workspaces, check out this [page](http://wiki.ros.org/catkin/workspaces). Importantly, note that the `catkin_make` command generated a `build` directory when it compiled the code in your `src` folder. This `build` directory has intermediary build files needed during the compilation process and you can delete it to recompile everything from scratch if you ever want to. 
 
-```
-source /home/netid/catkin_ws/devel/setup.bash
-```
-
-If you don't use bash but Z shells, then source `setup.zsh` instead in your Z shell [startup file](https://zsh.sourceforge.io/Intro/intro_3.html).
