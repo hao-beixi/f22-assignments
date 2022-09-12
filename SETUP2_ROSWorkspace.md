@@ -134,6 +134,8 @@ You will need sudo access to complete this step.
     $ catkin_make -DCMAKE_BUILD_TYPE=Release
     ```
 
+    (again, be patient...)
+
     Now you should have a devel space in `~/catkin_ws/devel`, which contains its own `setup.sh` file.
     Sourcing this file will `overlay` the install space onto your environment. 
     
@@ -150,5 +152,112 @@ You will need sudo access to complete this step.
     > Note that the `catkin_make` command generated a `build` directory when it compiled the code in your `src` folder. This `build` directory has intermediary build files needed during the compilation process to generate the executables and libraries in the `devel` folder. 
     If you ever need to, you can delete the `build` and `devel` folders and re-run `catkin_make` within `catkin_ws` to recompile everything from scratch.                
 
-At this point, you are done setting up your ROS workspace. If you want to know more about catkin workspaces, check out this [page](http://wiki.ros.org/catkin/workspaces). 
+## Part II - Test out Shutter's Simulation
 
+Now that you have setup Shutter's code in your catkin workspace, you will simulate
+the Shutter robot and use basic ROS tools to gather information about 
+[ROS nodes](http://wiki.ros.org/Nodes)
+-- processes that perform computation in your ROS system -- and 
+[ROS messages](http://wiki.ros.org/Messages) -- data being sent from one node to another.
+
+> The instructions that follow replicate the demo of Shutter's simulation that was done in the second course lecture. See the video 
+in [Canvas](https://yale.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=fbae6c7b-9a80-4478-8a7b-af0801386de5&start=430) if you don't remember this demo.
+     
+1. Open a new bash shell and start [roscore](http://wiki.ros.org/roscore). Roscore is a collection 
+of nodes and programs that are pre-requisites of a ROS-based system.
+
+    ```bash
+    $ roscore
+    ```
+       
+    > You must have `roscore` running in order for ROS nodes to communicate.
+         
+2. Open another terminal, and *bring up* a simulated version of the Shutter robot 
+with [roslaunch](http://wiki.ros.org/roslaunch).
+
+    ```bash
+    $ roslaunch shutter_moveit_config demo.launch moveit_controller_manager:=simple
+    ```
+    
+    > Roslaunch is a tool for easily launching multiple ROS nodes locally (or remotely
+    via [SSH](https://en.wikipedia.org/wiki/Secure_Shell)) and setting up parameters 
+    in ROS' [Parameter Server](http://wiki.ros.org/Parameter%20Server). You will often be working with
+    launch files in your assignments.
+    
+    The demo.launch file will do many things: 
+    
+    1. It will run another launch file (`shutter_brigup/launch/shutter_unity.launch`) which will 
+    open up the Unity simulation of the robot (and setup a dedicated TCP connection between ROS and Unity). The simulation code will be downloaded
+    from Google Drive if this is the first time that you are running the simulation in your workspace. 
+    
+    2. It will publish a description of the robot 
+    (in [URDF format](http://wiki.ros.org/urdf)) to the [ROS Parameter Server](http://wiki.ros.org/roscpp/Overview/Parameter%20Server) so
+     that MoveIt and RViz know about the robot's kinematic structure. In particular, the URDF model has information about the the joints of the robot 
+    and its sensors, including specific properties and relative placement.
+
+        > The ROS Parameter Server is a shared, multi-variate dictionary that is accessible via network APIs. 
+        Nodes use this server to store and retrieve parameters at runtime. Because it is not designed for 
+        high-performance, it is best used for static, non-binary data such as configuration parameters. 
+        It is meant to be globally viewable so that tools can easily inspect the configuration state of 
+        the system and modify it if necessary. 
+
+    3. It run a [robot_state_publisher](http://wiki.ros.org/robot_state_publisher) node that publishes 
+    the position of the joints of the robot to [tf](ros.org/wiki/tf). 
+     
+    4. It will set up the [MoveIt](https://moveit.ros.org/) motion planning pipeline for the robot.
+
+    5. It will launch [RViz]() as an interface for you to send
+    motion commands to the robot. 
+
+3. Try commanding the robot in RViz. If all is set up properly, then you should see the robot moving in Unity.
+
+4. Try commanding the robot from the command line. You can send specific requests for the position of each
+of the 4 joints in the robot as follows:
+
+    ```bash
+    $ rostopic pub -1 /unity_joint_group_controller/command std_msgs/Float64MultiArray "data: [0.0, -1.54, -1.54, 0.0]"
+    ```
+
+    The [rostopic](http://wiki.ros.org/rostopic) tool used above 
+
+5. Finally, use [rqt_graph](http://wiki.ros.org/rqt_graph) to visualize the 
+[nodes](http://wiki.ros.org/Nodes) that are currently running
+in your ROS system and the [topics](http://wiki.ros.org/Topics) that are being used to 
+exchange information between nodes.
+
+    ```bash
+    $ rosrun rqt_graph rqt_graph
+    ```
+    
+    Uncheck the "Group" options (e.g., "Namespaces" and "Actions") in rqt_graph, uncheck the "Debug" option 
+    under "Hide", and select "Nodes/Topics(all)" to visualize all of the nodes that are sharing information
+    in the graph. You should see a total of 5 `ROS nodes` (displayed as ellipses) in the graph: /arbotix, 
+    /robot_state_publisher, /motor_stopper, /rqt_gui_py_node_XXXX, and /rosout. 
+    
+    > The full name of the rqt_graph node includes numbers XXXX, which indicate that the
+    program was run as an anonymous node. The numbers were generated 
+    automatically when the node was initialized to provide the program a unique name, e.g.,
+    in case you want to run multiple versions of rqt_graph. More information about initializing nodes
+    in C++ or Python can be found 
+    [here](http://wiki.ros.org/roscpp/Overview/Initialization%20and%20Shutdown) or 
+    [here](http://wiki.ros.org/rospy/Overview/Initialization%20and%20Shutdown), respectively.
+    
+    The nodes are connected in the graph through `ROS topics` (displayed as squares). 
+    ROS topics are named buses over which data [messages](http://wiki.ros.org/Messages) are exchanged. 
+    There can be multiple publishers and subscribers to a topic. 
+    
+    > In general, nodes are not aware of who they are communicating with. 
+    Instead, nodes that are interested in data *subscribe* to the relevant topic; 
+    nodes that generate data *publish* to the relevant topic. 
+    
+    For example, the nodes /arbotix, /robot_state_publisher, and /rqt_gui_py_node_XXXX publish
+    messages to the /rosout topic. Thus, you should see a directed edge in the graph from
+    each of these nodes to the /rosout topic. Meanwhile, the 
+    node [/rosout](http://wiki.ros.org/rosout#rosapi) subscribes to the /rosout topic. This is 
+    illustrated in the graph with an edge that goes in the opposite direction: 
+    from the /rosout topic to the /rosout node.
+    
+    > The node [rosout](http://wiki.ros.org/rosout) implements a system-wide logging mechanism for messages
+    sent to the /rosout topic. The /rosout node subscribes to the /rosout topic to record
+    the messages into a log file.
+    
