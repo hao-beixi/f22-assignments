@@ -237,6 +237,21 @@ of the 4 joints in the robot as follows:
     command requests that the robot sets its second joint to the position "-1.54" radians. You can try sending
     other servo positions to the robot by repeating the command line above with different values for the `data` field.
 
+    The image below shows the main coordinate frames of the robot that one often cares about:
+
+    <img src="images/shutter_links.png"/>
+
+    Each coordinate frame is associated with a robot [link](http://wiki.ros.org/urdf/XML/link): 
+
+    1. `base_link`, which is at the very bottom of the robot with the $x$ axis (red) pointing forward; 
+    2. `shoulder_link`, which is above `base_link` and allows the robot to rotate left and right (yaw angle); 
+    3. `biceps_link`, which is above `shoulder_link` and allows the robot's head to move forward and backward;
+    4. `forearm_link`, which allows the head to move up and down; and
+    5. `wrist_link`, which allows the head to tilt.
+
+    The above 5 links make up the kinematic chain of the robot. You can visualize the frames as in the picture above in RViz by adding a [tf Display](http://wiki.ros.org/rviz/DisplayTypes/TF)
+    and then selecting the corresponding frames in the tf submenu.
+
 
 5. Finally, use [rqt_graph](http://wiki.ros.org/rqt_graph) to visualize the 
 [nodes](http://wiki.ros.org/Nodes) that are currently running
