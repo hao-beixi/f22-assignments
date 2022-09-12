@@ -6,6 +6,7 @@ In a terminal, run the following commands to install general system dependencies
 
 ```
 sudo apt install python3-vcstool
+sudo apt install python-is-python3
 ```
 
 > If you are setting up your workspace in the BIM laptops that are provided for the couse, then all apt dependencies have already been installed for you. If you encounter any problem about this, please contact the course T.F.
