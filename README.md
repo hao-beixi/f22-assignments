@@ -11,7 +11,7 @@ For Assignments 1-3, it is essential that you have completed the two set of set 
 1. [SETUP1_GitAssignmentRepo.md](SETUP1_GitAssignmentRepo.md)
 2. [SETUP2_ROSWorkspace.md](SETUP2_ROSWorkspace.md) 
 
-The first set of instructions explain how to setup a GitHub repository and the general procedure that should be followed by students when working on course assignments. The second set of instructions will help you create your [ROS Catkin Workspace](http://wiki.ros.org/catkin/workspaces) in Ubuntu 20.04. Follow these instructions carefully before beginning any assignment. 
+The first set of instructions explain how to setup a GitHub repository and the general procedure that should be followed by students when working on course assignments. The second set of instructions will help you create your [ROS Catkin Workspace](http://wiki.ros.org/catkin/workspaces) in Ubuntu 20.04 and will explain how ROS packages are organized in general. Follow these instructions carefully before beginning any assignment. 
 
 ## Background Knowledge
 

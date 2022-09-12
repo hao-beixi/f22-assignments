@@ -1,5 +1,25 @@
 # Setting up your ROS Workspace
 
+## Part 0 - Install dependencies
+
+In a terminal, run the following commands to install general system dependencies for Shutter's code:
+
+```
+sudo apt install python3-vcstool
+```
+
+> If you are setting up your workspace in the BIM laptops that are provided for the couse, then all apt dependencies have already been installed for you. If you encounter any problem about this, please contact the course T.F.
+
+Then, install Python dependencies:
+
+```
+pip install --upgrade --user pip  # upgrade pip
+pip install --user gdown          # install library to download Shutter simulation
+```
+
+When running commands on a terminal, pay attention to the information that is printed in the terminal. If you see any errors,
+please post them in Slack and/or communicate with the course T.F.
+
 ## Part I - Set up your workspace to work with Shutter
 
 *Catkin* is the official build system for ROS. To understand what it is for and why it exists, 
@@ -27,8 +47,7 @@ in your home directory. Follow the steps in this tutorial:
  
     # Load git submodules with ROS dependencies
     $ cd shutter-ros
-    $ git submodule init
-    $ git submodule update
+    $ git submodule update --init
     ```
     
     > [Git submodules](https://git-scm.com/book/en/v2/Git-Tools-Submodules) are other,
@@ -77,7 +96,18 @@ in your home directory. Follow the steps in this tutorial:
     [shutter-ros](https://gitlab.com/interactive-machines/shutter/shutter-ros.git) repository
     to understand its content and general organization. You can also access the documentation for shutter-ros at [https://shutter-ros.readthedocs.io](https://shutter-ros.readthedocs.io). 
         
-3. Install other third-party dependencies with [rosdep](http://docs.ros.org/independent/api/rosdep/html/).
+4. Copy other custom packages (including [MoveIt](https://github.com/yale-img/moveit)) to your workspace:
+
+    ```
+    # clone dependencies
+    $ cd ~/catkin_ws/src
+    $ mkdir ros-planning
+    $ vcs import --input shutter-ros/noetic_moveit.repos --recursive ros-planning
+    ```
+
+    Be patient as packages get downloaded into your `catkin_ws/src` folder.
+
+5. Install other third-party dependencies with [rosdep](http://docs.ros.org/independent/api/rosdep/html/).
 If rosdep is not found in your system, first install it and initialize it as 
 indicated [here](http://docs.ros.org/independent/api/rosdep/html/overview.html). 
 You will need sudo access to complete this step. 
@@ -93,17 +123,16 @@ You will need sudo access to complete this step.
 
     > If you don't have pip installed, follow [these instructions](https://linuxconfig.org/how-to-install-pip-on-ubuntu-18-04-bionic-beaver) to install it before installing the Python dependencies for shutter_face.
 
+    > If you are setting up your workspace in the BIM laptops that are provided for the couse, then all apt dependencies have already been installed for you. If you encounter any problem about this, please contact the course T.F.
+
            
-4. Build the packages in the src directory of your workspace with `catkin_make`. 
+6. Build the packages in the src directory of your workspace with `catkin_make`. 
 
     ```bash
     # Build your workspace
     $ cd ~/catkin_ws
     $ catkin_make -DCMAKE_BUILD_TYPE=Release
     ```
-
-    > You might want to select a different CMake build type other than Release (e.g. RelWithDebInfo or Debug).
-    More options can be found in [cmake.org](http://cmake.org/cmake/help/v2.8.12/cmake.html#variable:CMAKE_BUILD_TYPE). 
 
     Now you should have a devel space in `~/catkin_ws/devel`, which contains its own setup.bash file.
     Sourcing this file will `overlay` the install space onto your environment. 
@@ -119,13 +148,10 @@ You will need sudo access to complete this step.
      can work properly with the code that you've added to and built in ~/catkin_ws.
                   
 
-### Questions / Tasks
+At this point, you are done setting up your ROS workspace. If you want to know more about catkin workspaces, check out this [page](http://wiki.ros.org/catkin/workspaces). Importantly, note that the `catkin_make` command generated a `build` directory when it compiled the code in your `src` folder. This `build` directory has intermediary build files needed during the compilation process and you can delete it to recompile everything from scratch if you ever want to. Also, don't forget to source your `catkin_ws/devel/setup.sh` script whenever you are working with your ROS workspace. You can do this automatically by adding a line to your `~/.bashrc` file. For example, if your home folder is `/home/netid`, then add the following line to your `.bashrc`:
 
-Read more about catkin workspaces [here](http://wiki.ros.org/catkin/workspaces), 
-and answer the following questions in your assignment report:
+```
+source /home/netid/catkin_ws/devel/setup.bash
+```
 
-- **I-1.** What other directory was automatically created in ~/catkin_ws when you executed 
-`catkin_make` and what is this directory for?
-- **I-2.** The command `catkin_make` should have generated 3 types of setup files (setup.bash,
-setup.sh, setup.zsh). What is the difference between these setup files?
-
+If you don't use bash but Z shells, then source `setup.zsh` instead in your Z shell [startup file](https://zsh.sourceforge.io/Intro/intro_3.html).
