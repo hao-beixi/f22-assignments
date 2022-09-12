@@ -172,6 +172,8 @@ of nodes and programs that are pre-requisites of a ROS-based system.
     ```
        
     > You must have `roscore` running in order for ROS nodes to communicate.
+
+    > If you use `roslaunch`, it will automatically start roscore if it detects that it is not already running (unless the --wait argument is supplied).
          
 2. Open another terminal, and *bring up* a simulated version of the Shutter robot 
 with [roslaunch](http://wiki.ros.org/roslaunch).
@@ -213,6 +215,12 @@ with [roslaunch](http://wiki.ros.org/roslaunch).
 3. Try commanding the robot in RViz. If all is set up properly, then you should see the robot moving in Unity.
 
     <img src="images/shutter_unity.gif"/>
+
+    The gif above shows how the robot could be moving on your computer. To send commands from RViz:
+
+    1. Go to the "Planning" tab of the "MotionPlanning" panel provided by MoveIt
+    2. Move the robot in the right-hand panel, which shows the 3D handles
+    3. Once you are happy with the desired new position for the robot, click "Plan & Execute" in the "Planning" tab.
 
 4. Try commanding the robot from the command line. You can send specific requests for the position of each
 of the 4 joints in the robot as follows:
