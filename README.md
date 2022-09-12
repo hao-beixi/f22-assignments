@@ -6,9 +6,12 @@ Assignment repository for Yale's [CPSC-459/559 Building Interactive Machines](ht
 
 To get started with a given assignment, see the README.md file within the assignment directory. 
 
-For Assignments 1-3, it is essential that you have completed the set up instructions in the [SETUP1_GitAssignmentRepo.md](SETUP1_GitAssignmentRepo.md) file that is included in this repository. The instructions explain how to setup a GitHub repository and the general procedure that should be followed by students when working on course assignments.
+For Assignments 1-3, it is essential that you have completed the two set of set up instructions that are included in this repository:
 
-Also, you need to set up your [ROS Catkin Workspace](http://wiki.ros.org/catkin/workspaces) in Ubuntu 20.04 before beginning any assignment. Follow the instructions in [SETUP2_ROSWorkspace.md](SETUP2_ROSWorkspace.md) to do this. Note that you need access to a Ubuntu 20.04 machine to work with assignments in general. 
+1. [SETUP1_GitAssignmentRepo.md](SETUP1_GitAssignmentRepo.md)
+2. [SETUP2_ROSWorkspace.md](SETUP2_ROSWorkspace.md) 
+
+The first set of instructions explain how to setup a GitHub repository and the general procedure that should be followed by students when working on course assignments. The second set of instructions will help you create your [ROS Catkin Workspace](http://wiki.ros.org/catkin/workspaces) in Ubuntu 20.04. Follow these instructions carefully before beginning any assignment. 
 
 ## Background Knowledge
 
