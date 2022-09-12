@@ -5,8 +5,8 @@
 In a terminal, run the following commands to install general system dependencies for Shutter's code:
 
 ```
-sudo apt install python3-vcstool
-sudo apt install python-is-python3
+$ sudo apt install python3-vcstool
+$ sudo apt install python-is-python3
 ```
 
 > If you are setting up your workspace in the BIM laptops that are provided for the couse, then all apt dependencies have already been installed for you. If you encounter any problem about this, please contact the course T.F.
@@ -14,8 +14,8 @@ sudo apt install python-is-python3
 Then, install Python dependencies:
 
 ```
-pip install --upgrade --user pip  # upgrade pip
-pip install --user gdown          # install library to download Shutter simulation
+$ pip install --upgrade --user pip  # upgrade pip
+$ pip install --user gdown          # install library to download Shutter simulation
 ```
 
 When running commands on a terminal, pay attention to the information that is printed in the terminal. If you see any errors,
@@ -212,6 +212,8 @@ with [roslaunch](http://wiki.ros.org/roslaunch).
 
 3. Try commanding the robot in RViz. If all is set up properly, then you should see the robot moving in Unity.
 
+    <img src="images/shutter_unity.gif"/>
+
 4. Try commanding the robot from the command line. You can send specific requests for the position of each
 of the 4 joints in the robot as follows:
 
@@ -219,7 +221,14 @@ of the 4 joints in the robot as follows:
     $ rostopic pub -1 /unity_joint_group_controller/command std_msgs/Float64MultiArray "data: [0.0, -1.54, -1.54, 0.0]"
     ```
 
-    The [rostopic](http://wiki.ros.org/rostopic) tool used above 
+    The [rostopic](http://wiki.ros.org/rostopic) tool used above publishes a message to the `/unity_joint_group_controller/command` topic.
+    This message has [std_msgs/Float64MultiArray](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Float64MultiArray.html) as type.
+    This type has two fields `data` and `layout`, but the above command only sets the `data` field to "[0.0, -1.54, -1.54, 0.0]". 
+    Each of the values in the array correspond to the position of one joint in Shutter (in radians). That is, the command requests the robot
+    to set its first joint (the servo in the base of the robot) to the position "0.0" radians, which makes the robot look forward. Similarly, the
+    command requests that the robot sets its second joint to the position "-1.54" radians. You can try sending
+    other servo positions to the robot by repeating the command line above with different values for the `data` field.
+
 
 5. Finally, use [rqt_graph](http://wiki.ros.org/rqt_graph) to visualize the 
 [nodes](http://wiki.ros.org/Nodes) that are currently running
