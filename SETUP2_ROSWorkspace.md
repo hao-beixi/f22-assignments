@@ -242,9 +242,9 @@ of the 4 joints in the robot as follows:
     reach a position close to [0.0, -1.5, -1.0, -1.57]. You can check which position the robot has at any time during the
     simulation with the following command:
 
-    ```bash
-    $ rostopic echo /joint_states
-    ```
+        ```bash
+        $ rostopic echo /joint_states
+        ```
 
 5. Visualize the main coordinate frames of the robot's arm in RViz, as shown in the image below:
 
