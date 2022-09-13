@@ -50,10 +50,11 @@ you are unfamiliar with any of these tools, programs, or procedures, please revi
 - **Report:** You are expected to submit a pdf to Gradescope with answers to the questions/tasks at 
 the end of each part of the assignment. This report should also have any information needed 
 to understand and/or run your code, as well as the specific commit SHA of your final version of 
-the code for this assignment. The report is a fillable PDF which is available [here for CPSC 459 Students](https://drive.google.com/file/d/13RK8SxrP5KZ5ZIWbYWHZ9f-Usqm3yuHQ/view?usp=sharing) and [here for CPSC 559 Students](https://drive.google.com/file/d/1Odh0DwuCkOlATY4SjCXtnOALvDwp3zT7/view?usp=sharing). 
+the code for this assignment. The report is a fillable PDF which is available [here for CPSC 459 Students](https://drive.google.com/file/d/1hgnD4vI-mVXyBI59Um_zDWnep62Bm-mn/view?usp=sharing) and [here for CPSC 559 Students](https://drive.google.com/file/d/1xhAt4jRiC3NiYrUBL2NVaQfXOv3-TYae/view?usp=sharing). 
 
-    Use the latest version of [Adobe Acrobat Reader DC](https://get.adobe.com/reader/) to fill this PDF in Windows or OSX. You can get Reader DC for Windows and OSX from the [Yale Software Library](https://software.yale.edu/software/adobe-reader-dc).
-    In Ubuntu 20.04, you can install Acrobat Reader DC with [wine](https://en.wikipedia.org/wiki/Wine_(software)) by following [these instructions](https://linuxconfig.org/how-to-install-adobe-acrobat-reader-dc-wine-on-ubuntu-20-04-focal-fossa-linux).
+    Use the latest version of [Adobe Acrobat Reader DC](https://get.adobe.com/reader/) or [Adobe Acrobat Pro DC](https://www.adobe.com/acrobat/acrobat-pro.html) to fill this PDF in Windows or OSX. You can get Reader DC for Windows and OSX from the [Yale Software Library](https://software.yale.edu/software/adobe-reader-dc). Likewise, you can get Acrobat Pro as part of the Adobe Creative Cloud software that is also available through the [Yale Software Library](https://software.yale.edu/software/adobe-creative-cloud-0).
+    
+    In Ubuntu 20.04, you can install Acrobat Reader DC following [these instructions](https://linuxconfig.org/how-to-install-adobe-acrobat-reader-on-ubuntu-20-04-focal-fossa-linux). Also, you can install it with [wine](https://en.wikipedia.org/wiki/Wine_(software)) by following [these other instructions](https://linuxconfig.org/how-to-install-adobe-acrobat-reader-dc-wine-on-ubuntu-20-04-focal-fossa-linux).
     Note that you might need to install [Windows 7 fonts](https://www.w7df.com/p/windows-7.html) in Ubuntu for the Reader program to work properly (see [these instructions](https://askubuntu.com/a/1103305) to install the fonts).
     You are expected to fill out the fields in the report with your answers in text form or as images, as indicated by the PDF.
 
