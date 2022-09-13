@@ -283,7 +283,7 @@ You should also learn to visualize tf transforms in with [RViz](http://wiki.ros.
     ```
 
     > The `rosrun <package> <executable>` tool above allows you to run an executable in an arbitrary ROS package. In the above command in particular,
-    you are running the `rviz` executable (second argument) in the [rviz](http://wiki.ros.org/rviz) package.
+    you are running the `rviz` executable (second argument to rosrun) in the [rviz](http://wiki.ros.org/rviz) package (first argument).
 
 4. Change the `Fixed Frame` to "base_link" in rviz's Global Options panel. This will ensure
 that the robot's model is shown straight up in the middle of the 3D visualization area of rviz.
@@ -305,10 +305,7 @@ then see a simplified model of the robot in rviz, as in the figure below.
     The RobotModel display also uses the [/tf](wiki.ros.org/tf) transform 
     tree to position the links of the robot in their respective current location.
     The information in the /tf topic is updated by the /robot_state_publisher node based
-    on the messages that /arbotix publishes to the /joint_states topic.
-    
-    > As indicated in the rviz user guide, you can zoom in, pan, and rotate the view of the 
-    robot in rviz with your mouse.Add a
+    on the messages that the Unity simulation publishes to the /joint_states topic.
 
 
 ### Questions / Tasks
@@ -342,7 +339,7 @@ provide the transformation with both the rotation and translation components.
 bring up the robot? Please explain which node(s) contribute to generating the tf tree.
 
     > Tip: You should inspect what nodes and topics are being published in your ROS system,
-    e.g., with the [rqt_graph](http://wiki.ros.org/rqt_graph) tool. You can also read the shutter_sim.launch script
+    e.g., with the [rqt_graph](http://wiki.ros.org/rqt_graph) tool. You can also read the `shutter.launch` script
     in the shutter_bringup package (and any subsequent script that it launches) 
     to understand how the robot's tf tree is being generated.
 
@@ -383,6 +380,7 @@ script below, make sure that you are not running any other node in ROS.
     The launch script should then open RViz and display the robot and the moving target in front
     of it. The target should be displayed as a red ball.
     
+    <img src="docs/shutter_target.png"/>    
     
     > [Roslaunch](http://wiki.ros.org/roslaunch) is a tool for easily launching multiple
     ROS nodes. Roslaunch scripts are written in XML format, according to [this specification](http://wiki.ros.org/roslaunch/XML).

@@ -1,7 +1,9 @@
 <launch>
 
     <!-- run robot simulation -->
-    <include file="$(find shutter_bringup)/launch/shutter_sim.launch"/>
+    <include file="$(find shutter_bringup)/launch/shutter.launch">
+        <arg name="simulation" value="true"/>
+    </include>
 
     <!-- look forward if desired -->
     <node name="look_forward" pkg="shutter_lookat" type="look_forward.py"/>
