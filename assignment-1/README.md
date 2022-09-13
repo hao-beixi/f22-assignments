@@ -70,7 +70,7 @@ the [first assignment](https://github.com/Yale-BIM/f20-assignments/tree/master/a
 
 You assignment will be evaluated based on the content of your report and your code:
 
-- Report / Other Deliverables
+- Report 
     - Part I (25 pts): I-1 (5 pts) + I-2 (5 pts) + I-3 (5 pts) + I-4 (10 pts)
     - Part II (5 pts): II-2 (5 pts) 
     - Part III (10 pts): III-1 (3 pts) + III-3 (2 pts) + III-4 (5 pts)
@@ -78,12 +78,12 @@ You assignment will be evaluated based on the content of your report and your co
     - Part V (10 pts): V-1 (10 pts)
     - Part VI (10 pts): VI-1 (8 pts) + VI-3 (2 pts)
 - Code
-    * Part II-1 (15 pts) 
-    * Part III (26 pts): Virtual Camera (20 pts) + III-2 (4 pts) + III-5 (2 pts) 
-    * Part IV (4 pts): IV-4 (2 pts) + IV-5 (2 pts)
+    * Part II-1 (20 pts) 
+    * Part III (37 pts): Virtual Camera (24 pts) + III-2 (8 pts) + III-5 (5 pts) 
+    * Part IV (8 pts): IV-4 (4 pts) + IV-5 (4 pts)
     * Part VI (10 pts): VI-2 (4 pts) + VI-3 (6 pts)
 
-Students taking CPSC-459 will be evaluated over 100 pts. Those taking CPSC-559, will be evaluated over 130 pts.
+Students taking CPSC-459 will be evaluated over 120 pts. Those taking CPSC-559, will be evaluated over 150 pts.
 
 #### Further Reading and Tutorials
 
