@@ -145,7 +145,9 @@ add an additional input argument to the script for gathering the height of the o
 the book in the depth image. To this end, complete the `compute_depth_from_depth_image()` function in the script such that:
 
     i. it gathers the depth values corresponding to the book from the depth image,
+
     ii. filters out zero values (these cells of the depth image correspond to pixels in the grayscale image for which depth could not be estimated), and
+    
     iii. computes the average depth of the resulting filtered values. This average depth should be returned by the function.
     
     Run public tests for this part of this assignment to ensure that your code is operating as expected:
