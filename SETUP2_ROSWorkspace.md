@@ -12,7 +12,7 @@ in [this post](https://answers.ros.org/question/325039/apt-update-fails-cannot-i
 
    > Note that this assignment includes an example script called `install_ros_noetic.sh` 
    to show you all the commands that you need to run to install ROS in Ubuntu 20.04 and the assignment dependencies indicated below.
-   All these dependencies that require sudo (admin permissions) are already installed in the BIM laptops that registered students
+   All the dependencies that require sudo (admin permissions) are already installed in the BIM laptops that registered students
    have access to for the course. Thus, you can skip the next apt install instructions and only run the pip commands that follow.
 
 In a terminal, run the following commands to install general system dependencies for Shutter's code:
@@ -235,6 +235,9 @@ with [roslaunch](http://wiki.ros.org/roslaunch).
     1. Go to the "Planning" tab of the "MotionPlanning" panel provided by MoveIt
     2. Move the robot in the right-hand panel, which shows the 3D handles
     3. Once you are happy with the desired new position for the robot, click "Plan & Execute" in the "Planning" tab.
+
+    > If you are unsure about how to use RViz, check read sections 4-7 of the [RViz User Guide](http://wiki.ros.org/rviz/UserGuide). 
+    The guide will provide you an overview of the Panels, Displays, and configuration options available in RViz. 
 
 4. Try commanding the robot from the command line. You can send specific requests for the position of each
 of the 4 joints in the robot as follows:

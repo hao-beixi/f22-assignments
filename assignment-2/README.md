@@ -264,17 +264,55 @@ tf, but is more efficient. Although tf2 has general backward compatibility, you 
 tutorial from ROS. You should familiarize yourself with the `view_frames.py` and `tf_echo` tools from [tf2_tools](http://wiki.ros.org/tf2_tools). 
 You should also learn to visualize tf transforms in with [RViz](http://wiki.ros.org/rviz).
 
-<!--
-    > If you are using the bim laptops, then `ros-melodic-turtle-tf2`, `ros-melodic-tf2-tools`, and `ros-melodic-tf` should already be installed in the computer.
--->
+    > If you are using the BIM laptops, then `ros-melodic-turtle-tf2`, `ros-melodic-tf2-tools`, and `ros-melodic-tf` should already be installed in the computer.
+
+2. Run a simulation of Shutter (without MoveIt):
+
+    ```
+    $ roslaunch shutter_bringup shutter.launch simulation:=true
+    ```
+
+    You should then see the Unity simulator come up:
+
+    <img src="docs/shutter_unity.png"/>
+
+3. Then, open up Rviz using the [rosrun](http://wiki.ros.org/rosbash#rosrun) tool:
+
+    ```
+    $ rosrun rviz rviz
+    ```
+
+    > The `rosrun <package> <executable>` tool above allows you to run an executable in an arbitrary ROS package. In the above command in particular,
+    you are running the `rviz` executable (second argument) in the [rviz](http://wiki.ros.org/rviz) package.
+
+4. Change the `Fixed Frame` to "base_link" in rviz's Global Options panel. This will ensure
+that the robot's model is shown straight up in the middle of the 3D visualization area of rviz.
+    
+5. Change your background color to a light color (e.g., light gray) in the Global Options as well.
+    
+6. Add a `RobotModel` display to rviz. Click on the "Add" button in the Displays panel, and
+a window will pop up. Then, look for the "rviz" plugins folder, and select RobotModel. You should
+then see a simplified model of the robot in rviz, as in the figure below.
+
+    <img src="docs/shutter_rviz.png"/>
+
+    The [RobotModel Display type](http://wiki.ros.org/rviz/DisplayTypes/RobotModel) shows
+    the [links](http://wiki.ros.org/urdf/XML/link) of the robot according to 
+    the URDF model published by the shutter.launch script.
+    Each link describes a rigid body in the robot with physical, geometrical, 
+    and visual features. 
+    
+    The RobotModel display also uses the [/tf](wiki.ros.org/tf) transform 
+    tree to position the links of the robot in their respective current location.
+    The information in the /tf topic is updated by the /robot_state_publisher node based
+    on the messages that /arbotix publishes to the /joint_states topic.
+    
+    > As indicated in the rviz user guide, you can zoom in, pan, and rotate the view of the 
+    robot in rviz with your mouse.Add a
+
 
 ### Questions / Tasks
-Now that you know how to use basic tf tools, bring up a simulation of the robot Shutter (as in [assignment-1](../assignment-1/README.md)). 
-You will inspect its tf tree with tf tools. 
-
-> NOTE: In [assignment-1](../assignment-1/README.md), you ran `roscore` before bringing up the robot to enable ROS nodes to communicate. 
-But you can also launch `shutter_sim.launch` directly, as you did in the tutorial. 
-If roscore isn't already running, roslaunch  will automatically start it. Try it!
+Now you will inspect the robot's tf tree with tf tools. 
 
 - **I-1.** Generate an image of the tf tree of Shutter with [view_frames.py](http://wiki.ros.org/tf2_tools). 
 Include this image in your report.
@@ -286,7 +324,7 @@ Include this image in your report.
 frame and the *camera_color_optical_frame* frame?
 
 - **I-3.** Based on the tf tree, what is the ![equation](https://latex.codecogs.com/png.latex?4%20%5Ctimes%204)<!--$`4 \times 4`$--> transformation ![equation](https://latex.codecogs.com/png.latex?%5E%7BC%7D_%7BO%7DT)<!--$`^{C}_{O}T`$-->
-between the *camera_link* frame (![equation](https://latex.codecogs.com/png.latex?C)<!--$`C`$-->) and the *camera_color_optical_frame* frame (![equation](https://latex.codecogs.com/png.latex?O)<!--$`O`$-->)? Please
+from the *camera_color_optical_frame* frame (![equation](https://latex.codecogs.com/png.latex?O)<!--$`O`$-->) to the *camera_link* frame (![equation](https://latex.codecogs.com/png.latex?C)<!--$`C`$-->)? Please
 provide the transformation with both the rotation and translation components.
 
     > Tip 1: You can use the [tf_echo](http://wiki.ros.org/tf#tf_echo) tool to query
