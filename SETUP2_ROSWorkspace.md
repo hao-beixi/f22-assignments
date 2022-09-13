@@ -295,6 +295,7 @@ exchange information between nodes.
     - /server_endpoint
     - /unity_simulation
     - /unity_trajectory_controller
+    <br/>
     
     > The full name of the rqt_graph node includes numbers XXXXX, which indicate that the
     program was run as an anonymous node. The numbers were generated 
