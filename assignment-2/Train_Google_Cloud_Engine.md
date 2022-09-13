@@ -5,7 +5,7 @@ cloud ML Engine, etc. Here, we recommend that you use a Virtual Machine (VM) as 
 setup to working with a local machine.
 
 > All the students that are enrolled in CPSC-459/559 will receive a $50 credit for Google Cloud
-to use for Assignment 4 or their final project. The credit will be associated
+to use for Assignment 2 or their final project. The credit will be associated
 to the student's Yale email. Students should use the resources judiciously. 
 
 ## WARNING. Make Sure to Stop Your VM Instances!
@@ -26,10 +26,10 @@ website, click on `Get started for free`, and **log in with your Yale email.** I
 for the course assignments.
    
 3. Finally, follow the steps in [this tutorial](https://cloud.google.com/compute/docs/quickstart-linux) to create a Virtual Machine. 
-As a reference for Assignment 4, past editions of the course have used Virtual Machines from Google Cloud with the 
+As a reference for Assignment 2, past editions of the course have used Virtual Machines from Google Cloud with the 
 following specifications:
 
-    - **Name:** bim-a4
+    - **Name:** bim-a2
     - **Region:** us-central1 (Iowa)
     - **Zone:** us-central1-c
     - **Machine Family:** General Purpose

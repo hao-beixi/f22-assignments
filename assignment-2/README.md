@@ -1,6 +1,6 @@
-# Assignment 4
+# Assignment 2
 
-This is the fourth assignment for Yale's CPSC-459/559 Building Interactive Machines course.
+This is the second assignment for Yale's CPSC-459/559 Building Interactive Machines course.
 
 ## Table of Contents
 
