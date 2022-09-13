@@ -2,14 +2,26 @@
 
 ## Part 0 - Install dependencies
 
+You should have access to a computer with `Ubuntu 20.04` and `ROS Noetic` to complete the assignments in this repository. 
+The instructions below assume that you are using a [bash shell](https://www.gnu.org/software/bash/) 
+to do the assignments, and that you have installed the *desktop-full* Noetic version of ROS 
+using `apt-get` as in this guide: 
+[http://wiki.ros.org/noetic/Installation/Ubuntu](http://wiki.ros.org/noetic/Installation/Ubuntu). If you get an
+error from Ubuntu about failing to verify the public key for the ROS ppa repository, update your key as indicated
+in [this post](https://answers.ros.org/question/325039/apt-update-fails-cannot-install-pkgs-key-not-working/).
+
+   > Note that this assignment includes an example script called `install_ros_noetic.sh` 
+   to show you all the commands that you need to run to install ROS in Ubuntu 20.04 and the assignment dependencies indicated below.
+   All these dependencies that require sudo (admin permissions) are already installed in the BIM laptops that registered students
+   have access to for the course. Thus, you can skip the next apt install instructions and only run the pip commands that follow.
+
 In a terminal, run the following commands to install general system dependencies for Shutter's code:
 
 ```
+$ sudo apt install ros-noetic-turtle-tf2 
 $ sudo apt install python3-vcstool
 $ sudo apt install python-is-python3
 ```
-
-> If you are setting up your workspace in the BIM laptops that are provided for the couse, then all apt dependencies have already been installed for you. If you encounter any problem about this, please contact the course T.F.
 
 Then, install Python dependencies:
 
@@ -17,6 +29,8 @@ Then, install Python dependencies:
 $ pip install --upgrade --user pip  # upgrade pip
 $ pip install --user gdown          # install library to download Shutter simulation
 ```
+
+> If you don't have `pip` installed, follow [these instructions](https://linuxconfig.org/how-to-install-pip-on-ubuntu-18-04-bionic-beaver) to install it.
 
 When running commands on a terminal, pay attention to the information that is printed in the terminal. If you see any errors,
 please post them in Slack and/or communicate with the course T.F.
