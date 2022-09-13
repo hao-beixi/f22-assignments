@@ -10,6 +10,7 @@ sudo apt install ros-noetic-desktop-full
 
 # specific dependencies for these assignments
 sudo apt install ros-noetic-turtle-tf2 
+sudo apt install ros-noetic-cv-bridge python3-cv-bridge
 sudo apt install python3-vcstool
 sudo apt install python-is-python3
 

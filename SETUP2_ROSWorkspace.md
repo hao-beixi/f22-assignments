@@ -19,6 +19,7 @@ In a terminal, run the following commands to install general system dependencies
 
 ```
 $ sudo apt install ros-noetic-turtle-tf2 
+$ sudo apt install ros-noetic-cv-bridge python3-cv-bridge
 $ sudo apt install python3-vcstool
 $ sudo apt install python-is-python3
 ```

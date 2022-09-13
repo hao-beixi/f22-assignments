@@ -1,6 +1,6 @@
-# Assignment 2 (Extra questions for CPSC-559)
+# Assignment 1 (Extra questions for CPSC-559)
 
-The sections below for Assignment 2 are only meant to be completed/answered by students taking CPSC-559. 
+The sections below for Assignment 1 are only meant to be completed/answered by students taking CPSC-559. 
 Students in CPSC-459 are welcome to try to solve the problems/tasks below and even come to office hours to discuss them. 
 However, their answers to the questions in Part V and Part VI of the Assignment 2 will not be considered during grading.
 
@@ -144,9 +144,9 @@ add an additional input argument to the script for gathering the height of the o
 - **VI-3.** Add code to the `process_images.py` script to compare your estimated value from V-2 with the average depth of 
 the book in the depth image. To this end, complete the `compute_depth_from_depth_image()` function in the script such that:
 
-    a. it gathers the depth values corresponding to the book from the depth image,
-    b. filters out zero values (these cells of the depth image correspond to pixels in the grayscale image for which depth could not be estimated), and
-    c. computes the average depth of the resulting filtered values. This average depth should be returned by the function.
+    i. it gathers the depth values corresponding to the book from the depth image,
+    ii. filters out zero values (these cells of the depth image correspond to pixels in the grayscale image for which depth could not be estimated), and
+    iii. computes the average depth of the resulting filtered values. This average depth should be returned by the function.
     
     Run public tests for this part of this assignment to ensure that your code is operating as expected:
 
