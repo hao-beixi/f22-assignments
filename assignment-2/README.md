@@ -34,23 +34,16 @@ the pinhole camera model, and inverse kinematics. You will also practice
 a bit of geometry, e.g., to transform points across coordinate frames.
 
 #### System Requirements
-As for the first assignment, you should have access to a computer with `Ubuntu 20.04` and `ROS Noetic` to complete the homework. 
-
-You should also have `git` installed in the machine that you are using to work on your assignment.
-You will use git to save your work to your [GitHub](http://www.github.com) repository.
-
-Lastly, you should use Python 3 to implement all your solutions (including extra questions for CPSC-559).
+This assignment should be completed in Ubuntu 20.04. Before beginning the assignment, you need to first
+complete the set up instructions in [SETUP1..md](../SETUP1_GitAssignmentRepo.md) and [SETUP2..md](../SETUP2_ROSWorkspace.md) 
+to create your Git assignment repository and your ROS workspace. 
 
 #### Background Knowledge
 
-This assignment assumes that you have already completed the [first](../assignment-1) assignment and,
-thus, have set up your repository and catkin workspace. You are also expected to have experience with Linux shells 
-(e.g., [bash](https://www.gnu.org/software/bash/)), [git](https://git-scm.com/), and
-the [Robot Operating System (ROS)](http://www.ros.org/). This includes being familiar with
-the `roscore`, `rosrun`, `roslaunch`, `rostopic`, `rosmsg`, `rosnode`, `rqt_graph`, and `rviz` tools. You
-should also know how to bring up a simulation of the Shutter robot in ROS, and
-control the position of its joints one at a time. If
-you are unfamiliar with any of these tools, programs, or procedures, please revisit [assignment-1](../assignment-1).
+This assignment assumes that you are familiar with
+the `roscore`, `roslaunch`, `rostopic`, `rqt_graph`, and `rviz` tools (explained in ). You
+should also know how to control the position of Shutter's joints one at a time in simulation. If
+you are unfamiliar with any of these tools, programs, or procedures, please revisit Part II of [SETUP2..md](../SETUP2_ROSWorkspace.md).
 
 #### Deliverables
 
