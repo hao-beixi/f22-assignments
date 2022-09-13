@@ -226,22 +226,35 @@ with [roslaunch](http://wiki.ros.org/roslaunch).
 of the 4 joints in the robot as follows:
 
     ```bash
-    $ rostopic pub -1 /unity_joint_group_controller/command std_msgs/Float64MultiArray "data: [0.0, -1.54, -1.54, 0.0]"
+    $ rostopic pub -1 /unity_joint_group_controller/command std_msgs/Float64MultiArray "data: [0.0, -1.5, -1.0, 0.0]"
     ```
 
     The [rostopic](http://wiki.ros.org/rostopic) tool used above publishes a message to the `/unity_joint_group_controller/command` topic.
     This message has [std_msgs/Float64MultiArray](http://docs.ros.org/en/noetic/api/std_msgs/html/msg/Float64MultiArray.html) as type.
-    This type has two fields `data` and `layout`, but the above command only sets the `data` field to "[0.0, -1.54, -1.54, 0.0]". 
+    This type has two fields `data` and `layout`, but the above command only sets the `data` field to "[0.0, -1.5, -1.0, 0.0]". 
     Each of the values in the array correspond to the position of one joint in Shutter (in radians). That is, the command requests the robot
     to set its first joint (the servo in the base of the robot) to the position "0.0" radians, which makes the robot look forward. Similarly, the
     command requests that the robot sets its second joint to the position "-1.54" radians. You can try sending
     other servo positions to the robot by repeating the command line above with different values for the `data` field.
 
-    The image below shows the main coordinate frames of the robot that one often cares about:
+    > Note that the Unity simulation would stop the robot from moving upon self-collisions. For example,
+    if you send the command above with: "data: [0.0, -1.5, -1.0, -2.0]" then the robot would only
+    reach a position close to [0.0, -1.5, -1.0, -1.57]. You can check which position the robot has at any time during the
+    simulation with the following command:
+
+    ```bash
+    $ rostopic echo /joint_states
+    ```
+
+5. Visualize the main coordinate frames of the robot's arm in RViz, as shown in the image below:
 
     <img src="images/shutter_links.png"/>
 
-    Each coordinate frame is associated with a robot [link](http://wiki.ros.org/urdf/XML/link): 
+    To get this visualizaiton, add a [tf Display](http://wiki.ros.org/rviz/DisplayTypes/TF) in RViz
+    and then select the corresponding frames in the tf/Frames submenu on the left panel. If the MoveIt visualization handles are distracting or occluding tf, 
+    you can turn them off by deselecting "MotionPlanning" in the left panel of RViz.
+
+    Each coordinate frame in the robot associated with a [link](http://wiki.ros.org/urdf/XML/link): 
 
     1. `base_link`, which is at the very bottom of the robot with the $x$ axis (red) pointing forward; 
     2. `shoulder_link`, which is above `base_link` and allows the robot to rotate left and right (yaw angle); 
@@ -249,11 +262,15 @@ of the 4 joints in the robot as follows:
     4. `forearm_link`, which allows the head to move up and down; and
     5. `wrist_link`, which allows the head to tilt.
 
-    The above 5 links make up the kinematic chain of the robot. You can visualize the frames as in the picture above in RViz by adding a [tf Display](http://wiki.ros.org/rviz/DisplayTypes/TF)
-    and then selecting the corresponding frames in the tf submenu. If the MoveIt visualization handles are distracting, you can turn them off by deselecting "MotionPlanning" in the left window within RViz with all of the current displays.
+    The above 5 links make up a significant portion the kinematic chain of the robot.
+
+    > Note that the robot has many more frames than the 5 links mentioned above. Some of these additional frames
+    do not correspond to real robot links (specific rigid bodies) but were added to the robot's model (its URDF description)
+    for convenience. For example, there are coordinate frames (like `left_eye`) for helping control the eye's of the robot when rendered in 
+    its screen.
 
 
-5. Finally, use [rqt_graph](http://wiki.ros.org/rqt_graph) to visualize the 
+6. Finally, use [rqt_graph](http://wiki.ros.org/rqt_graph) to visualize the 
 [nodes](http://wiki.ros.org/Nodes) that are currently running
 in your ROS system and the [topics](http://wiki.ros.org/Topics) that are being used to 
 exchange information between nodes.
