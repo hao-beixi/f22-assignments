@@ -281,10 +281,22 @@ exchange information between nodes.
     
     Uncheck the "Group" options (e.g., "Namespaces" and "Actions") in rqt_graph, uncheck the "Debug" option 
     under "Hide", and select "Nodes/Topics(all)" to visualize all of the nodes that are sharing information
-    in the graph. You should see a total of 5 `ROS nodes` (displayed as ellipses) in the graph: /arbotix, 
-    /robot_state_publisher, /motor_stopper, /rqt_gui_py_node_XXXX, and /rosout. 
+    in the graph. You should see a total of 8 `ROS nodes` (displayed as ellipses) in the graph: 
+
+    <img src="images/rqt_graph.png" />
+
+    The nodes in the picture above are:
     
-    > The full name of the rqt_graph node includes numbers XXXX, which indicate that the
+    - /move_group
+    - /robot_state_publisher
+    - /rosout
+    - /rqt_gui_py_node_XXXXX
+    - /rviz_gradient_...
+    - /server_endpoint
+    - /unity_simulation
+    - /unity_trajectory_controller
+    
+    > The full name of the rqt_graph node includes numbers XXXXX, which indicate that the
     program was run as an anonymous node. The numbers were generated 
     automatically when the node was initialized to provide the program a unique name, e.g.,
     in case you want to run multiple versions of rqt_graph. More information about initializing nodes
@@ -300,7 +312,7 @@ exchange information between nodes.
     Instead, nodes that are interested in data *subscribe* to the relevant topic; 
     nodes that generate data *publish* to the relevant topic. 
     
-    For example, the nodes /arbotix, /robot_state_publisher, and /rqt_gui_py_node_XXXX publish
+    For example, the nodes /move_group and /rqt_gui_py_node_XXXXX publish
     messages to the /rosout topic. Thus, you should see a directed edge in the graph from
     each of these nodes to the /rosout topic. Meanwhile, the 
     node [/rosout](http://wiki.ros.org/rosout#rosapi) subscribes to the /rosout topic. This is 
