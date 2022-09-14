@@ -250,6 +250,10 @@ $ cd <path-to-your-catkin-workspace-root-directory>
 $ catkin_make -DCMAKE_BUILD_TYPE=Release
 ```
 
+> Tip: If `roscd shutter_bringup` does not change your repository to your workspace's `shutter-ros/shutter_bringup` directory,
+then you have not sourced the `devel/setup.bash` script in your workspace. Check carefully how to set up your workspace
+in the [SETUP0..md](../SETUP0_ROSWorkspace.md) instructions.
+
 
 ## Part I. Introduction to tf
 This part of the assignment will help you understand how [tf](https://wiki.ros.org/tf2) lets 
