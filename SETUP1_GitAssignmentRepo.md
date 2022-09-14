@@ -33,14 +33,17 @@ to generate a new SSH key in your machine and [upload your public key](https://d
 
 3. Create an empty, `private repository` in GitHub called *cpsc459-assignments* or  *cpsc559-assignments* based on whether you are fulfilling the undergrad (CPSC 459) or graduate (CPSC 559) requirements for the course. The GiLab project will be used to store your assignment's code.
 
-4. Open the repository page, copy the SSH URL, and paste it in a terminal to `clone your project` into your machine. For example:
+4. Open the repository page, copy the SSH URL, and paste it in a terminal to `clone your project` into your ROS workspace. For example:
 
     ```bash
-    # Example
-    $ git clone https://github.com/<username>/cpsc459-assignments.git <username>-cpsc459-assignments
+    # Go to workspace's src folder
+    $ cd ~/catkin_ws/src
+
+    # clone empty repository
+    $ git clone git@github.com:<username>/cpsc459-assignments.git <username>-cpsc459-assignments
     ```
 
-	where \<username\> is your GitHub username.
+	where \<username\> is your GitHub username. You should now have a folder (a Git repository) for your assignments within your ROS workspace.
 
 5. Change your directory to your cloned repository.
 
@@ -55,19 +58,19 @@ to generate a new SSH key in your machine and [upload your public key](https://d
     ```
 
 6. Create a `new remote called upstream` that points to the 
-[assignments repository](https://github.com/Yale-BIM/f21-assignments.git)
+[assignments repository](https://github.com/Yale-BIM/f22-assignments.git)
 which contains the set of assignments and starter code.
 
     ```bash
     # Example
-    $ git remote add upstream https://github.com/Yale-BIM/f21-assignments.git
+    $ git remote add upstream https://github.com/Yale-BIM/f22-assignments.git
     ```
 
     > NOTE: A Git remote is a pair of alias and URL (link) to another Git repository.
     > By default, your freshly cloned local repository will have a remote named 
     > origin that points to your online Git repository in GitHub. 
     > The example above tells your local Git repository to track another remote Git 
-    > repository located at https://github.com/Yale-BIM/f20-assignments.git
+    > repository located at `https://github.com/Yale-BIM/f22-assignments.git`
     > and name it as upstream.
     
 7. Get the latest `commits from upstream` and merge them into your own local repository.
@@ -89,13 +92,13 @@ which contains the set of assignments and starter code.
 7. Verify that the commits from upstream are now present in your own GitHub project by checking the project's page in GitHub.
 
 8. Ensure that your repository in GitHub has visibility set to **private** in 
-Settings -> Manage Access.
+Settings -> Danger Zone.
 
-9. Add the course instructor and the T.F.(s) as members of your GitHub repository in Settings -> Manage Access. In the Manage access section, choose "Invite a collaborator", and add the Yale usernames for the instructor and teaching fellow(s).
+9. Add the course instructor and the T.F.(s) as members of your GitHub repository in Settings -> Collaborators and teams. In the Manage access section, choose "Add people", and add the Yale usernames for the instructor and teaching fellow(s).
 
-	> The instructor's email is `marynel.vazquez _at_ yale.edu`, and the teaching fellows' emails are `nathan.tsoi _at_ yale.edu` with `_at_` meaning `@`.
+	> The instructor's email is `marynel.vazquez _at_ yale.edu`, and the teaching fellows' emails are `a.lew _at_ yale.edu` with `_at_` meaning `@`.
 
-10. Once you have finished setting up your repository, fill and submit this [Repository Record Form](https://forms.gle/QkChQbbVdR8b3xNx5). Your response will be used to check that your repository exists, has been setup properly, and that the instructor and T.F.(s) have access to it.
+10. Once you have finished setting up your repository, fill and submit this [Repository Record Form](https://forms.gle/DxpY66Mpb6eoqBgD6). Your response will be used to check that your repository exists, has been setup properly, and that the instructor and T.F.(s) have access to it.
 
 ## Part II. Working on your assignment
 
@@ -111,7 +114,7 @@ Once your repository is setup, you will need to follow the steps below when work
 	If a merge conflict happens, always use latest
 	commit from upstream. Your work is safe as long you commit and push 
 	your code to GitHub regularly and only work on the assignments once they are 
-    officially "out" per the course [schedule](https://cpsc459-bim.gitlab.io/f21/schedule/). 
+    officially "out" per the course [schedule](https://cpsc459-bim.gitlab.io/f22/schedule/). 
 	
 	Once you have resolved any merge conflicts and all commits from
 	upstream are merged successfully to your own master branch, push it 
@@ -152,7 +155,7 @@ Once your repository is setup, you will need to follow the steps below when work
     
     > To see all of your commits, go to your repository's GitHub page and click where it says "X commits" (right below the download "Code" button in the interface). Copy the commit SHA for the final version of the code and paste it in the report.
     
-    ii. Submit the report (with the commit SHA) as a pdf to [Gradescope](https://www.gradescope.com/courses/299261). If the assignment
+    ii. Submit the report (with the commit SHA) as a pdf to [Gradescope](https://www.gradescope.com/courses/443504/). If the assignment
     asks for other documents, submit them to Gradescope as well.
 
     > Most assignments will appear twice in Gradescope: once for the submission of the report, once for the submission of code. The report and any other extra file that is requested should be submitted to the Report assignment; your code in GitHub should be submitted to the Code assignment. 
