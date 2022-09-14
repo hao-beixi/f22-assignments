@@ -2,9 +2,9 @@
 
 ## Table of Contents
 
-  * [Part 0 - Install dependencies](#part-0-install-dependencies)
-  * [Part I - Set up your workspace to work with Shutter](#part-i-set-up-your-workspace-to-work-with-shutter)
-  * [Part II - Test out Shutter's Simulation](#part-ii-test-out-shutters-simulation)
+  * [Part 0 - Install dependencies](#part-0---install-dependencies)
+  * [Part I - Set up your workspace to work with Shutter](#part-i---set-up-your-workspace-to-work-with-shutter)
+  * [Part II - Test out Shutter's Simulation](#part-ii---test-out-shutters-simulation)
 
 ## Part 0 - Install dependencies
 
