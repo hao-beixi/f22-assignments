@@ -1,5 +1,11 @@
 # Setting up your ROS Workspace
 
+## Table of Contents
+
+  * [Part 0 - Install dependencies](#part-0-install-dependencies)
+  * [Part I - Set up your workspace to work with Shutter](#part-i-set-up-your-workspace-to-work-with-shutter)
+  * [Part II - Test out Shutter's Simulation](#part-ii-test-out-shutters-simulation)
+
 ## Part 0 - Install dependencies
 
 You should have access to a computer with `Ubuntu 20.04` and `ROS Noetic` to complete the assignments in this repository. 
@@ -343,3 +349,4 @@ exchange information between nodes.
     sent to the /rosout topic. The /rosout node subscribes to the /rosout topic to record
     the messages into a log file.
     
+At this point, please continue setting up your assignment repository as in the [SETUP1_GitAssignmentRepo.md](SETUP1_GitAssignmentRepo.md) instructions.

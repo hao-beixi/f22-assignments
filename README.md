@@ -8,10 +8,10 @@ To get started with a given assignment, see the README.md file within the assign
 
 For Assignments 1-3, it is essential that you have completed the two set of set up instructions that are included in this repository:
 
-1. [SETUP1_GitAssignmentRepo.md](SETUP1_GitAssignmentRepo.md)
-2. [SETUP2_ROSWorkspace.md](SETUP2_ROSWorkspace.md) 
+1. [SETUP0_ROSWorkspace.md](SETUP0_ROSWorkspace.md) 
+2. [SETUP1_GitAssignmentRepo.md](SETUP1_GitAssignmentRepo.md)
 
-The first set of instructions explain how to setup a GitHub repository and the general procedure that should be followed by students when working on course assignments. The second set of instructions will help you create your [ROS Catkin Workspace](http://wiki.ros.org/catkin/workspaces) in Ubuntu 20.04 and will explain how ROS packages are organized in general. Follow these instructions carefully before beginning any assignment. 
+The first set of instructions will help you create your [ROS Catkin Workspace](http://wiki.ros.org/catkin/workspaces) in Ubuntu 20.04 and will explain how ROS packages are organized in general. Additionally, you will be able to test out Shutter's simulation right away! The second set of instructions explain how to setup a GitHub repository and the general procedure that should be followed by students when working on course assignments. Follow these instructions carefully before beginning the first assignment. 
 
 ## Background Knowledge
 

@@ -35,8 +35,8 @@ a bit of geometry, e.g., to transform points across coordinate frames.
 
 #### System Requirements
 This assignment should be completed in Ubuntu 20.04. Before beginning the assignment, you need to first
-complete the set up instructions in [SETUP1..md](../SETUP1_GitAssignmentRepo.md) and [SETUP2..md](../SETUP2_ROSWorkspace.md) 
-to create your Git assignment repository and your ROS workspace. 
+complete the set up instructions in [SETUP0..md](../SETUP0_ROSWorkspace.md) and [SETUP1..md](../SETUP1_GitAssignmentRepo.md), which will
+help you create your ROS workspace and create your Git assignment repository.
 
 #### Background Knowledge
 
