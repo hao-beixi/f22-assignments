@@ -269,7 +269,7 @@ tf, but is more efficient. Although tf2 has general backward compatibility, you 
 tutorial from ROS. You should familiarize yourself with the `view_frames.py` and `tf_echo` tools from [tf2_tools](http://wiki.ros.org/tf2_tools). 
 You should also learn to visualize tf transforms in with [RViz](http://wiki.ros.org/rviz).
 
-    > If you are using the BIM laptops, then `ros-melodic-turtle-tf2`, `ros-melodic-tf2-tools`, and `ros-melodic-tf` should already be installed in the computer.
+    > If you are using the BIM laptops, then `ros-noetic-turtle-tf2`, `ros-noetic-tf2-tools`, and `ros-noetic-tf` should already be installed in the computer.
 
 2. Run a simulation of Shutter (without MoveIt):
 
