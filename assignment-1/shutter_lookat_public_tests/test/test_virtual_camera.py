@@ -87,11 +87,11 @@ class TestVirtualCamera(unittest.TestCase):
         Check that the information is being published on /virtual_camera/camera_image
         """
         rospy.Subscriber(self.camera_image_topic, Image, self._image_callback, queue_size=5)
-        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(10)  # 10 seconds in the future
+        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(15)  # 10 seconds in the future
 
         # wait patiently for a message
         while not rospy.is_shutdown() and not self.image_success:
-            time.sleep(0.1)
+            time.sleep(1.0)
             if rospy.Time.now() > timeout_t:
                 break 
 
