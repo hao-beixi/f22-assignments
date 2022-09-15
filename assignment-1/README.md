@@ -457,7 +457,7 @@ given the increased complexity of this node in comparison previous examples. For
         code is backed up and readily accessible in the future.
     
 - **II-2.**  Stop any ROS processes that you are running, relaunch the 
-    generate_target.launch script, run your `publish_target_relative_to_realsense_camera.py` node, and create a 
+    `generate_target.launch` script, run your `publish_target_relative_to_realsense_camera.py` node, and create a 
     new image of the tf tree in ROS, e.g., using [view_frames.py](http://wiki.ros.org/tf2_tools) or [rqt_tf_tree](http://wiki.ros.org/rqt_tf_tree). 
     Add the image of the tf tree to your report.
     

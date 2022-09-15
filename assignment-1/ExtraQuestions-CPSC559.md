@@ -117,7 +117,7 @@ parameters (![equation](https://latex.codecogs.com/png.latex?K)<!--$`K`$-->) of 
 
     > Tip: We recommend that you draw the geometric relations of the known and unknown variables for this problem. Include this drawing in your report to help explain your answer to this question. 
 
-- **VI-2.** Modify the `docs/process_images.py` script to implement your solution to the task VI-1. To this end, first 
+- **VI-2.** Modify the `depth/process_images.py` script to implement your solution to the task VI-1. To this end, first 
 add an additional input argument to the script for gathering the height of the object of interest (in this case, the book):
 
     ```python
