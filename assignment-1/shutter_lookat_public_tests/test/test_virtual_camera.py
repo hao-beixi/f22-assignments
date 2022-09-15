@@ -90,8 +90,10 @@ class TestVirtualCamera(unittest.TestCase):
         timeout_t = rospy.Time.now() + rospy.Duration.from_sec(10)  # 10 seconds in the future
 
         # wait patiently for a message
-        while not rospy.is_shutdown() and rospy.Time.now() < timeout_t and not self.image_success:
+        while not rospy.is_shutdown() and not self.image_success:
             time.sleep(0.1)
+            if rospy.Time.now() > timeout_t:
+                break 
 
         self.assertTrue(self.image_success, "Did not get any image message on {}.".format(self.camera_image_topic))
         print("Success. Got at least one image message through the {} topic!".format(self.camera_image_topic))
