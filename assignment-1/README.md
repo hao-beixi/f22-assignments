@@ -429,8 +429,12 @@ given the increased complexity of this node in comparison previous examples. For
             > Tip: An example on broadcasting tf transformations can be found in 
             [this tutorial](http://wiki.ros.org/tf2/Tutorials/Writing%20a%20tf2%20broadcaster%20%28Python%29).
         
-    - Close all your nodes in ROS, launch the `generate_target.launch` script, and launch your new node which publishes
-    the `target` frame. 
+    - Close all your nodes in ROS, launch the `generate_target.launch` script, and run your new node which publishes
+    the `target` frame:
+
+        ```bash
+        $ rosrun shutter_lookat publish_target_relative_to_realsense_camera.py
+        ```
     
     - Add a TF display to RViz, and verify that the new `target` frame that you are publishing
     visually matches the position of the moving target (red ball). If the frame and the moving
@@ -541,7 +545,13 @@ a new message from the /target topic is received.
     > Tip: Examples on converting OpenCV images to ROS messages can be found
     in [this tutorial](http://wiki.ros.org/cv_bridge/Tutorials/ConvertingBetweenROSImagesAndOpenCVImagesPython).
     
-6. Visualize the images that your node is publishing using the 
+6. Launch the `generate_target.launch` script again, run your node:
+
+    ```bash
+    $ rosrun shutter_lookat virtual_camera.py
+    ```
+
+    and visualize the images that your node is publishing using the 
 [rqt_image_view](http://wiki.ros.org/rqt_image_view) tool. You should see the red circle
 moving in a circular path in the image (as in the Figure below). If this is not the case, please check your implementation of the
 virtual_camera.py script.
