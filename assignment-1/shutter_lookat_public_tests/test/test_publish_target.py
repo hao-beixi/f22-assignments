@@ -59,10 +59,11 @@ class TestPublishTarget(unittest.TestCase):
 
         t = None        # transform
         err = None      # error
-        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(10)  # 10 seconds in the future
+        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(15)  # 15 seconds in the future
+        exceeded_time = False
 
         # wait patiently for a transform
-        while not rospy.is_shutdown() and t is None and rospy.Time.now() < timeout_t:
+        while not rospy.is_shutdown() and t is None:
             try:
                 t = self.tf_buffer.lookup_transform("base_link",
                                                     self.target_frame,
@@ -78,13 +79,18 @@ class TestPublishTarget(unittest.TestCase):
                 err = e
                 continue
 
+            if rospy.Time.now() > timeout_t:
+                exceeded_time = True
+                break
+
         if err is not None:
             err_str = "Got error: {}".format(err)
         else:
             err_str = ""
 
-        self.assertIsNotNone(t, "Failed to find a transformation between base_link and {}.{}\nCheck how the node "
-                                "is publishing the transform for the target.".format(self.target_frame, err_str))
+        self.assertIsNotNone(t, f"Failed to find a transformation between base_link and {self.target_frame} (waited for {rospy.Time.now()-timeout_t}" \
+                                " secs / timeout: {exceeded_time}).{err_str}\nCheck how the node " \
+                                "is publishing the transform for the target.")
 
         print("Success. Found the frame {} in the tf tree!".format(self.target_frame))
 
