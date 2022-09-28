@@ -693,7 +693,6 @@ the virtual camera that you already implemented is working correctly.
     Inspect your ROS bag with the [rosbag info](http://wiki.ros.org/rosbag/Commandline#rosbag_info) tool to verify that it contains messages
     for all of the following topics:
         
-        * /diagnostics
         * /joint_states 
         * /rosout   
         * /target  
