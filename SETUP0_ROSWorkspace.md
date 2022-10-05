@@ -121,7 +121,7 @@ in your home directory. Follow the steps in this tutorial:
         
 4. Copy other custom packages (including [MoveIt](https://github.com/yale-img/moveit)) to your workspace:
 
-    ```
+    ```bash
     # clone dependencies
     $ cd ~/catkin_ws/src
     $ mkdir ros-planning
