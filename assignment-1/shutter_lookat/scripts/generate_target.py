@@ -69,7 +69,7 @@ def generate_target():
         pose_msg.pose.orientation.w = 1.0
 
         # Check if current Time exceeds clock speed
-        if timestamp_buffer is not None and timestamp_buffer <= pose_msg.header.stamp:
+        if timestamp_buffer is not None and timestamp_buffer >= pose_msg.header.stamp:
             rospy.logwarn('Publish rate exceeds clock speed; check your clock publish rate')
             rate.sleep()
             continue
