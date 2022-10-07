@@ -47,6 +47,7 @@ def generate_target():
     x_value = rospy.get_param("~x_value", default=1.5)
     radius = rospy.get_param("~radius", default=0.1)
     publish_rate = rospy.get_param("~publish_rate", default=30)
+    timestamp_buffer = None
     
     object.x = x_value
 
@@ -67,10 +68,17 @@ def generate_target():
         pose_msg.pose.position.z = object.center_z + np.cos(object.angle)*object.radius
         pose_msg.pose.orientation.w = 1.0
 
+        # Check if current Time exceeds clock speed
+        if timestamp_buffer is not None and timestamp_buffer <= pose_msg.header.stamp:
+            rospy.logwarn('Publish rate exceeds clock speed; check your clock publish rate')
+            rate.sleep()
+            continue
+
         target_msg = Target()
         target_msg.pose = pose_msg
         target_msg.radius = radius
         vector_pub.publish(target_msg)
+        timestamp_buffer = pose_msg.header.stamp
 
         # publish a marker to visualize the target in RViz
         marker_msg = Marker()
