@@ -83,7 +83,7 @@ class KalmanFilterNode(object):
         # Publishers
         self.pub_filtered = rospy.Publisher("/filtered_target", PoseStamped, queue_size=5)
         self.pub_future = rospy.Publisher("/future_target", PoseStamped, queue_size=5)
-        self.pub_markers = rospy.Publisher("/filtered_markers", PoseStamped, queue_size=5)
+        self.pub_markers = rospy.Publisher("/filtered_markers", MarkerArray, queue_size=5)
 
         # Subscribers
         self.obs_sub = rospy.Subscriber("/target", Target, self.obs_callback, queue_size=5)
@@ -112,7 +112,7 @@ class KalmanFilterNode(object):
 
             # compute elapsed time from last prediction
             current_time = rospy.Time.now()
-            delta_t = (current_time - obs_msg.header.stamp).to_sec()
+            delta_t = (current_time - last_time).to_sec()
             assert delta_t >= 0, "Negative delta_t = {}?".format(delta_t) # sanity check!
 
             # assemble A matrix: helps generate new state from prior state and elapsed time
@@ -187,8 +187,8 @@ class KalmanFilterNode(object):
         msg = PoseStamped()
         msg.header.stamp = current_stamp
         msg.pose.position.x = mu[0,0]
-        msg.pose.position.y = mu[0,1]
-        msg.pose.position.z = mu[0,2]
+        msg.pose.position.y = mu[1,0]
+        msg.pose.position.z = mu[2,0]
         self.pub_filtered.publish(msg)
 
     
