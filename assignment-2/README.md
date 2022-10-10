@@ -45,7 +45,7 @@ If you are not, please check [this tutorial](https://docs.scipy.org/doc/numpy/us
 
 #### Preliminaries
 You will be training supervised learning models, especially Neural Networks, for this assignment. 
-It is possible to complete all of the tasks using your local CPU, but it might be faster at times to train on the cloud and
+It is possible to complete the training of models using your local CPU, but it might be faster at times to train on the cloud and
 using hardware acceleration (e.g., a dedicated GPU).
 
 > Whether or not you use the cloud to train your neural networks, the deliverables are the same.
@@ -81,7 +81,7 @@ that you would like to be evaluated on. The report is a fillable PDF which is av
 to Google Drive and share them with anybody who has access to the links.
 
 - **Code:** Finally, you are expected to push code for this assignment to your 
-[Github](http://www.github.com) repository and submit it to Gradescope, as in all prior assignments.
+[Github](http://www.github.com) repository and submit it to Gradescope.
 
 #### Evaluation
 
@@ -96,7 +96,7 @@ You assignment will be evaluated based on the content of your report and your co
     * Part III (28 pts): III-1 (14 pts) + III-2 (14 pts)
 
 **Note on Part III of the assignment:** Part III provides extra credit for those at the top of the leaderboard in Gradescope.
-The extra credit (2 pts) is valid for all students (CPSC 459 or 559) and will be counted for the final course grade 
+The extra credit (2 pts) will be counted for the final course grade 
 (over 100 pts for this assignment). 
 
 #### Further Reading
@@ -128,8 +128,8 @@ install Python dependencies, and update the shutter-ros repository:
 $ cd <path-to-your-repository-in-your-workspace>
 $ git pull upstream master
 
-# install Assignment-4 Python dependencies
-$ cd assignment-4
+# install Assignment-2 Python dependencies
+$ cd assignment-2
 $ ./install_python_deps.sh
 
 # update the shutter-ros repository 
@@ -142,13 +142,14 @@ $ catkin_make -DCMAKE_BUILD_TYPE=Release
 ```
 
 The above `install_python_deps.sh` script will install several Python packages
-that are required for this assignment, including TensorFlow v. 2.6.0. 
+that are required for this assignment, including TensorFlow v. 2.10.0. 
 
 You can verify your TensorFlow installation as follows:
 
 ```bash
 $ python3 -c "import tensorflow as tf; print(tf.__version__)"
-2.6.0
+(...)
+2.10.0
 ```
 
 **NOTE:** If your machine has a GPU with CUDA Compute Capability 3.5 or higher and 
@@ -156,7 +157,7 @@ you have [CUDA 11.2](https://developer.nvidia.com/cuda-11.2-download-archive) pl
 [cuDNN 8.1.0](https://developer.nvidia.com/cudnn) installed in your system, then you should install:
 
 ```bash
-pip3 install --user tensorflow-gpu==2.6.0
+pip3 install --user tensorflow==2.10.0
 ```
 
 to take advantage of hardware acceleration. You can test that your GPU is visible in TensorFlow
@@ -170,7 +171,15 @@ by running the following commands on a Python shell:
 The function should return True if TensorFlow can access your GPU. If the function
 returns False, check the errors that are printed in the shell. Common errors include
 not having Cuda 11.2 installed in the system but a different version, not having CuDNN
-installed for Cuda 11.2, and not having CUDA system variables setup in your environment. 
+installed for Cuda 11.2, and not having CUDA system variables setup in your environment.
+For instance, important CUDA system variables include:
+
+```bash
+export PATH=$PATH:/usr/local/cuda-11.2/bin
+export CUDADIR=/usr/local/cuda-11.2
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/cuda-11.2/lib64
+```
+
 See the [TensorFlow GPU support page](https://www.tensorflow.org/install/gpu) 
 for more information. 
 
@@ -186,7 +195,7 @@ Once you've read the primer, you should complete the tasks below to approximate 
 Your code should leverage [TensorFlow's Keras API](https://www.tensorflow.org/guide/keras).
 
 To get you started, this assignment provides two files within the 
-`assignment-4/function_approximation` directory:
+`assignment-2/function_approximation` directory:
 
 - *train_and_test_saddle_function.py:* main file that you will complete in this part of the assignment.
 - *saddle_function_utils:* code to generate data and help you visualize results.
@@ -197,7 +206,7 @@ script generates for you and example predictions with a linear neural network mo
 [TensorFlow's Keras API](https://www.tensorflow.org/versions/r2.0/api_docs/python/tf/keras):
 
 ```bash
-$ cd assignment-4/function_approximation
+$ cd assignment-2/function_approximation
 $ ./train_and_test_saddle_function.py --visualize_training_data
 ```
 
@@ -207,7 +216,7 @@ as in the figure below:
 <img src="docs/training-val-data.png" width="600"/>
 
 And, once the linear model is trained for a number of epochs with the 
-[Adam optimizer](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/Adam), the script would show:
+[Adam optimizer](https://www.tensorflow.org/api_docs/python/tf/keras/optimizers/Adam), the script would show a figure like the one below:
 
 <img src="docs/fit-linear.png" width="600"/>
 
@@ -237,8 +246,8 @@ optional arguments:
 The optional parameters `lr`, `epochs`, and `batch_size` correspond to the learning rate,
 number of epochs, and bath size that are used at training time.
 
-Read the code in the training script to familiarize yourself with its functionality. We highly recommend that you also 
-watch [Nathan's video](https://yale.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=80140234-566a-417d-b4ad-adc201246740), where he walks you through the code in a Google Colab notebook, so that you understand how to work with Keras within the training script.
+Read the code in the training script to familiarize yourself with its functionality. Optionally, you can also 
+watch [Nathan's video](https://yale.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=c6bbc9b8-1619-48e6-991d-af2a00efdcd9), where he walks you through the code in a [Google Colab notebook](https://colab.research.google.com/drive/1XXUKUXh1kMRgg6Vd6VkPZJIbMe0s11w-?usp=sharing) so that you understand how to work with Keras within the training script. Note that you do not have to work with this notebook for your assignment. In fact, the notebook is missing certain lines of code that Nathan completes in his video. This is so that he can highlight key functionality already included in the [assignment-2/function_approximation/train_and_test_saddle_function.py](function_approximation/train_and_test_saddle_function.py) script that is part of this assignment.
 
 ### Questions/Tasks
 
@@ -267,8 +276,8 @@ in the `train_model()` method of the train_and_test_saddle_function.py script:
 
     The callbacks perform the following operations during the training loop:
     
-    - **tf.keras.callbacks.TensorBoard:** [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) 
-    write [TensorBoard](https://www.tensorflow.org/tensorboard) logs to a given directory.
+    - **tf.keras.callbacks.TensorBoard:** The [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) 
+    callback writes [TensorBoard](https://www.tensorflow.org/tensorboard) logs to a given directory.
     - **tf.keras.callbacks.ModelCheckpoint:** Callback that saves the model after every epoch (see
     more information [here](https://www.tensorflow.org/api_docs/python/tf/keras/callbacks/ModelCheckpoint)).
     Because we set "save_best_only = True", the callback would only save the model if the
@@ -337,12 +346,12 @@ and train its weights further (e.g., to resume training or for fine-tuning on a 
     $ ./train_and_test_saddle_function.py --load_model <path_to_model_h5_file> [--lr 1e-2] [--epochs 500] [--batch_size 16]
     ```
     
-    The model that you trained before for task I-1 should be stored as best_monkey_weights.h5
-    within the folder corresponding to your training session in assignments-4/function_approximation/logs.
+    The model that you trained before for task I-1 should be stored as `best_monkey_weights.h5`
+    within the folder corresponding to your training session in `assignments-2/function_approximation/logs`.
     You can pass this model as argument to your train_and_test_saddle_function.py to test the new
     functionality that you just implemented.
     
-- **I-3.** Complete the function called `build_nonlinear_model()` in the train_and_test_saddle_function.py 
+- **I-3.** Complete the function called `build_nonlinear_model()` in the `train_and_test_saddle_function.py` 
 script. This function should have as argument the number of input features for the data and should
 return a [Keras model](https://www.tensorflow.org/api_docs/python/tf/keras/models/Model), similar
 to the `build_linear_model()` function that you implemented before. The difference between these functions, though, 
@@ -362,7 +371,7 @@ script when it finishes running.
     ... # complete
     ```
     
-    Once you've implemented the function, edit the last lines of the train_and_test_saddle_function.py 
+    Once you've implemented the function, edit the last lines of the `train_and_test_saddle_function.py` 
     script to be able to change the model that is trained through the command line:
     
     ```python
@@ -407,7 +416,7 @@ classifier.
 
 1. Download a subset of the [Face Detection Dataset and Benchmark](http://vis-www.cs.umass.edu/fddb/) 
 from [this link](https://drive.google.com/open?id=1JIIalRu5WZQ01p-S6mBxzHV8ZMqAJcdH) and place it in 
-the `assignment-4/face_detection` directory (note that you should not commit the data to your repository).
+the `assignment-2/face_detection` directory (note that you should not commit the data to your repository).
 
    > The data is provided as a [numpy npz file](https://docs.scipy.org/doc/numpy-1.15.1/reference/generated/numpy.savez.html) for this assignment. 
    The .npz file format is a zipped archive of files named after the variables they contain. 
@@ -416,7 +425,7 @@ the `assignment-4/face_detection` directory (note that you should not commit the
    Check that you can open the data in python and that it has inputs and target values:
    
    ```bash
-   $ cd assignment-4/face_detection/ # go to the assignment-4/face_detection directory within your private repository
+   $ cd assignment-2/face_detection/ # go to the assignment-2/face_detection directory within your private repository
    $ python3 
    >>> import numpy as np
    >>> data = np.load("64x64_data.npz")
@@ -434,7 +443,7 @@ the `assignment-4/face_detection` directory (note that you should not commit the
    
    <img src="docs/face_example.png" alt="Face example from the dataset"/>
    
-2. Read the `train_face_detection.py` skeleton code in the `assignment-4/face_detection` directory. 
+2. Read the `train_face_detection.py` skeleton code in the `assignment-2/face_detection` directory. 
 This code is provided to get you started on building your custom face classifier. You should be able to run the code
 and load the training data with the following command:
 
@@ -466,7 +475,7 @@ train_face_detection.py script so that it:
    
    d. Trains the model based on the input arguments: batch_size, epochs, lr, val, logs_dir.
    These arguments are all defined in the bottom section of the script, when they are
-   added to the [ArgumentParser](https://docs.python.org/2/library/argparse.html).
+   added to the [ArgumentParser](https://docs.python.org/3.8/library/argparse.html).
    
    The script should have saved one file to disk after finishing training:
    
@@ -513,18 +522,18 @@ train your model using the 64x64_data.npz dataset:
     For example, if your link is `https://drive.google.com/file/d/<file_id>/view?usp=sharing`, then add the 
     following url download_weights.py: `WEIGHT_FILE_URL=https://drive.google.com/uc?id=<file_id>`
     
-    To test that your model weights URL is setup properly in the evaluate_face_detection.py script, run it as:
+    To test that your model weights URL is setup properly using the `download_weights.py` script. Run it as:
     ```bash
     $ ./download_weights.py
     ```
     The script should then download your weights file to your local drive.
     
     **NOTE:** The `performance` of your model will be evaluated using the `evaluate_face_detection.py` script
-    within the `assignment-4/face_detection` directory. The script will be run on a test set (that is not provided
+    within the `assignment-2/face_detection` directory. The script will be run on a test set (that is not provided
     as part of this assignment) but that you can assume comes from the same image distribution as
     the data that is provided in the 64x64_data.npz file. The expectation is that your model should
     reach at least **0.9 (or 90%) binary accuracy** on the (unseen) test set. You can read more about
-    binary accuracy in the [official TensorFlow documentation](https://www.tensorflow.org/versions/r2.6/api_docs/python/tf/keras/metrics/BinaryAccuracy).
+    the binary accuracy metric in the [official TensorFlow documentation](https://www.tensorflow.org/versions/r2.6/api_docs/python/tf/keras/metrics/BinaryAccuracy).
     
     In general, we recommend that you use [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) 
     to monitor the performance of your model in a validation set as it trains.
@@ -537,7 +546,7 @@ function of the threshold to better understand if 0.5 is a good value for your c
     To start, make a copy of the evaluate_face_detection.py script and name it `plot_roc_curve.py`:
 
     ```bash
-    $ cd assignment-4/face_detection
+    $ cd assignment-2/face_detection
     $ cp evaluate_face_detection.py plot_roc_curve.py
     ```
     
@@ -641,7 +650,7 @@ function of the threshold to better understand if 0.5 is a good value for your c
     Once your script is working as desired, commit it to your repository. In addition, add to your report the ROC curve that your script 
     displayed when running on the 64x64_data.npz file and what was the best threshold found given the TRP and FPR values computed for your model. 
 
-## Part III. Imitation Learning (2 extra points)
+## Part III. Imitation Learning (2 potential extra points)
 
 In this last part of the assignment, you will gain practical experience with Behavioral Cloning. That is, you will use
 supervised learning to estimate a motion policy for Shutter.
@@ -698,7 +707,7 @@ The output action is 2-dimensional. It corresponds to the new position for the r
 
 - **III-1.** Generate data for behavioral cloning as explained in the prior section, and implement a script to learn
 an imitation policy from this data using the TensorFlow Keras API. The script should be called `learn_policy.py` and 
-be placed within the `assignment-4/shutter_behavior_cloining/scripts` directory. 
+be placed within the `assignment-2/shutter_behavior_cloining/scripts` directory. 
 
     The script should:
      
@@ -709,7 +718,7 @@ be placed within the `assignment-4/shutter_behavior_cloining/scripts` directory.
        
     2. Load up the data and use it to train a neural network model that predicts the new joint positions for the robot 
     (joint_1, and joint_3). For your convenience, this assignment provides you the `load_data()` function 
-    within the `assignment-4/shutter_behavior_cloning/scripts/train_utils.py` script to load up the `state_action.txt`
+    within the `assignment-2/shutter_behavior_cloning/scripts/train_utils.py` script to load up the `state_action.txt`
     data.
     
     3. Save the model's weights to disk (as well as any feature normalization parameters if need be). The Keras model
@@ -718,13 +727,13 @@ be placed within the `assignment-4/shutter_behavior_cloining/scripts` directory.
     into a single file.
     
     Once you have trained your model, upload your saved files to Google Drive and make them accessible to "Anyone with 
-    the link". Then, add this link to the top of the `assignment-4/shutter_behavior_cloning/scripts/train_utils.py` file
+    the link". Then, add this link to the top of the `assignment-2/shutter_behavior_cloning/scripts/train_utils.py` file
     and test that they can be automatically downloaded using the `download_model_files()` function inside that same 
     Python file. Remember that if Google gives you a link like 
     `https://drive.google.com/file/d/<file_id>/view?usp=sharing`, then you should add 
     `https://drive.google.com/uc?id=<file_id>` to the script for the evaluation with Gradescope to run successfully.
     
-- **III-2.** Complete the `assignment-4/shutter_behavior_cloining/scripts/run_policy.py` script so that it loads up 
+- **III-2.** Complete the `assignment-2/shutter_behavior_cloining/scripts/run_policy.py` script so that it loads up 
 your model and computes new poses for Shutter to follow the target. More specifically, update lines 26-28 in the script
 to load up your model from disk using the model file path and normalization params provided to the node via:
     ```python
@@ -735,7 +744,7 @@ to load up your model from disk using the model file path and normalization para
     the robot's joint position such that the `target_callback()` function can command the robot to move appropriately relative to the observed target.
 
     **NOTE 1:** You can test your model with the `test_policy.launch` file within 
-    `assignment-4/shutter_behavior_cloning/test`. For example:
+    `assignment-2/shutter_behavior_cloning/test`. For example:
     ```bash
     rostest shutter_behavior_cloning test_policy.launch model:=<full_path_to_model_hdf5> [normp:=<full_path_to_normalization_file>] run_rviz:=True
     ```
@@ -749,9 +758,10 @@ to load up your model from disk using the model file path and normalization para
     whether your training script runs as indicated in Part III-1 and 
     your model can be downloaded successfully from Google Drive for testing.
     
-    **NOTE 3:** The student(s) with the minimum average error: `avg(diff_j1 + diff_j3)` up to 5 point precision
+    **NOTE 3:** The student(s) with the minimum average error: `avg(diff_j1 + diff_j3)` up to 3 point precision
     will receive 2 extra points in their final course grade. Multiple submissions to this assignment are allowed
-    in Gradescope.
+    in Gradescope. There are two parallel leaderboards: one for 459, and one for 559. Thus, at least 2 students are 
+    expected to get extra points for this part of the assignment (one enrolled in 459 and one in 559).
     
 
 Once you've finished the assignment, **add the commit SHA** that you would like to be evaluate on to your report.

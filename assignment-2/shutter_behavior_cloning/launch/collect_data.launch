@@ -2,12 +2,14 @@
 
     <!-- make shutter look forward? -->
     <arg name="look_forward" value="True"/>
-    <arg name="publish_rate" default="1"/>
+    <arg name="publish_rate" default="0.25"/>
     <arg name="save_state_actions" default="False"/>
     <arg name="output_file" default="$(find shutter_behavior_cloning)/data/state_action.txt"/>
 
     <!-- bring up the robot -->
-    <include file="$(find shutter_bringup)/launch/shutter_sim.launch" />
+    <include file="$(find shutter_bringup)/launch/shutter.launch">
+        <arg name="simulation" value="true"/>
+    </include>
 
     <!-- generate the simulated moving object -->
     <node name="generate_random_target" pkg="shutter_behavior_cloning" type="generate_random_target.py" output="screen">

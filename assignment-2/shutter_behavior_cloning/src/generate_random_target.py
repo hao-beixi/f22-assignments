@@ -44,6 +44,9 @@ def generate_random_target():
     # Init the node
     rospy.init_node('generate_random_target', anonymous=True)
 
+    # local vars
+    timestamp_buffer = None
+
     # Get ROS params
     x_min = rospy.get_param("~x_min", default=dflt_x_min)
     x_max = rospy.get_param("~x_max", default=dflt_x_max)
@@ -63,7 +66,15 @@ def generate_random_target():
 
         # publish the location of the target as a PoseStamped
         pose_msg = random_pose(x_min, x_max, y_min, y_max, z_min, z_max)
+
+        # Check if current Time exceeds clock speed
+        if timestamp_buffer is not None and timestamp_buffer >= pose_msg.header.stamp:
+            rospy.logwarn('Publish rate exceeds clock speed; check your clock publish rate')
+            rate.sleep()
+            continue
+
         target_pub.publish(pose_msg)
+        timestamp_buffer = pose_msg.header.stamp
 
         # publish a marker to visualize the target in RViz
         marker_msg = Marker()
@@ -71,7 +82,7 @@ def generate_random_target():
         marker_msg.action = Marker.ADD
         marker_msg.color.a = 0.5
         marker_msg.color.b = 1.0
-        marker_msg.lifetime = rospy.Duration(1.0)
+        marker_msg.lifetime = rospy.Duration(10.0)
         marker_msg.id = 0
         marker_msg.ns = "target"
         marker_msg.type = Marker.SPHERE

@@ -14,6 +14,7 @@ import numpy as np
 from urdf_parser_py.urdf import URDF
 from scipy.optimize import least_squares
 from std_msgs.msg import Bool
+from std_msgs.msg import Float64MultiArray
 
 
 def transform_msg_to_T(trans):
@@ -124,15 +125,13 @@ class ExpertNode(object):
 
         # joint values
         self.move = True
-        self.joint1 = None
-        self.joint3 = None
+        self.current_pose = None #[0.0, 0.0, 0.0, 0.0]
 
         # get robot model
         self.robot = URDF.from_parameter_server()
 
         # joint publishers
-        self.joint1_pub = rospy.Publisher('/joint_1/command', Float64, queue_size=5)    # command for base rotation
-        self.joint3_pub = rospy.Publisher('/joint_3/command', Float64, queue_size=5)    # command for robot tilt
+        self.joint_pub = rospy.Publisher("/unity_joint_group_controller/command", Float64MultiArray, queue_size=5)
 
         # tf subscriber
         self.tf_buffer = tf2_ros.Buffer(rospy.Duration(1200.0))  # tf buffer length
@@ -165,16 +164,25 @@ class ExpertNode(object):
         :param msg: joint state
         """
         joint1_idx = -1
+        joint2_idx = -1
         joint3_idx = -1
+        joint4_idx = -1
         for i in range(len(msg.name)):
             if msg.name[i] == 'joint_1':
                 joint1_idx = i
+            elif msg.name[i] == 'joint_2':
+                joint2_idx = i
             elif msg.name[i] == 'joint_3':
                 joint3_idx = i
-        assert joint1_idx >= 0 and joint3_idx > 0, \
-            "Missing joints from joint state! joint1 = {}, joint3 = {}".format(joint1_idx, joint3_idx)
-        self.joint1 = msg.position[joint1_idx]
-        self.joint3 = msg.position[joint3_idx]
+            elif msg.name[i] == 'joint_4':
+                joint4_idx = i
+        assert joint1_idx >= 0 and joint2_idx >= 0 and joint3_idx >= 0 and joint4_idx >= 0, \
+            "Missing joints from joint state! joint1 = {}, joint2 = {}, joint3 = {}, joint4 = {}".\
+                format(joint1_idx, joint2_idx, joint3_idx, joint4_idx)
+        self.current_pose = [msg.position[joint1_idx],
+                             msg.position[joint2_idx],
+                             msg.position[joint3_idx],
+                             msg.position[joint4_idx]]
 
     def get_p_T1_T2(self, msg):
         """
@@ -227,10 +235,12 @@ class ExpertNode(object):
 
         return p, T1, T2
 
-    def compute_joints_position(self, msg):
+    def compute_joints_position(self, msg, joint1, joint3):
         """
         Helper function to compute the required motion to make the robot's camera look towards the target
         :param msg: target message
+        :param joint1: current joint 1 position
+        :param joint3: current joint 3 position
         :return: new joint positions for joint1 and joint3; or None if something went wrong
         """
         p, T1, T2 = self.get_p_T1_T2(msg)
@@ -248,21 +258,21 @@ class ExpertNode(object):
         offset_3 = -res.x[1]
 
         # cap offset for joint3 based on joint limits
-        if self.joint3 + offset_3 > self.robot.joints[3].limit.upper:
-            new_offset_3 = offset_3 + self.robot.joints[3].limit.upper - (self.joint3 + offset_3)
+        if joint3 + offset_3 > self.robot.joints[3].limit.upper:
+            new_offset_3 = offset_3 + self.robot.joints[3].limit.upper - (joint3 + offset_3)
             rospy.loginfo("Computed offset of {} but this led to exceeding the joint limit ({}), "
                           "so the offset was adjusted to {}".format(offset_3, self.robot.joints[3].limit.upper,
                                                                     new_offset_3))
-        elif self.joint3 + offset_3 < self.robot.joints[3].limit.lower:
-            new_offset_3 = offset_3 + self.robot.joints[3].limit.lower - (self.joint3 + offset_3)
+        elif joint3 + offset_3 < self.robot.joints[3].limit.lower:
+            new_offset_3 = offset_3 + self.robot.joints[3].limit.lower - (joint3 + offset_3)
             rospy.loginfo("Computed offset of {} but this led to exceeding the joint limit ({}), "
                           "so the offset was adjusted to {}".format(offset_3, self.robot.joints[3].limit.lower,
                                                                     new_offset_3))
         else:
             new_offset_3 = offset_3
 
-        new_j1 = self.joint1 + offset_1
-        new_j3 = self.joint3 + new_offset_3
+        new_j1 = joint1 + offset_1
+        new_j3 = joint3 + new_offset_3
 
         return new_j1, new_j3
 
@@ -271,15 +281,17 @@ class ExpertNode(object):
         Target callback
         :param msg: target message
         """
-        if self.joint1 is None:
-            rospy.logwarn("Joint 1 is unknown. Waiting to receive joint states.")
+        if self.current_pose is None:
+            rospy.logwarn("Joint positions are unknown. Waiting to receive joint states.")
             return
 
         if not self.move:
             return
 
         # compute the required motion to make the robot look towards the target
-        joint_angles = self.compute_joints_position(msg)
+        joint3 = self.current_pose[2]
+        joint1 = self.current_pose[0]
+        joint_angles = self.compute_joints_position(msg, joint1, joint3)
         if joint_angles is None:
             # we are done. the node might not be ready yet...
             return
@@ -291,12 +303,13 @@ class ExpertNode(object):
         if self.fid is not None:
             self.fid.write("%s\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\t%.4f\n" %
                            (msg.header.frame_id, msg.pose.position.x, msg.pose.position.y, msg.pose.position.z,
-                            self.joint1, self.joint3, new_j1, new_j3))
+                            joint1, joint3, new_j1, new_j3))
             self.fid.flush()
 
         # publish command
-        self.joint1_pub.publish(Float64(new_j1))
-        self.joint3_pub.publish(Float64(new_j3))
+        msg = Float64MultiArray()
+        msg.data = [float(new_j1), float(0.0), float(new_j3), float(0.0)]
+        self.joint_pub.publish(msg)
 
 
 if __name__ == '__main__':
