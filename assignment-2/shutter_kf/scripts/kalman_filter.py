@@ -8,7 +8,7 @@ import rospy
 from shutter_lookat.msg import Target
 from geometry_msgs.msg import PoseStamped
 from cv_bridge import CvBridge, CvBridgeError
-from sensor_msgs.msg import Image
+from visualization_msgs.msg import Marker, MarkerArray
 
 from threading import Lock
 
@@ -72,6 +72,7 @@ class KalmanFilterNode(object):
         self.assemble_C_matrix()
 
         # other node variables
+        self.frame_id = None                               # frame id for the observations and filtering
         self.latest_observation_msg = None                 # latest PointStamped observation that was received by the node
         self.mutex = Lock()                                # mutex for the observation
         self.bridge = CvBridge()                           # OpenCV - ROS bridge
@@ -80,14 +81,18 @@ class KalmanFilterNode(object):
         last_time = None                                   # Last time-stamp of when a filter update was done
 
         # Publishers
-        self.pub = rospy.Publisher("/filtered_target", PoseStamped, queue_size=5)
-        self.pub = rospy.Publisher("/future_target", PoseStamped, queue_size=5)
+        self.pub_filtered = rospy.Publisher("/filtered_target", PoseStamped, queue_size=5)
+        self.pub_future = rospy.Publisher("/future_target", PoseStamped, queue_size=5)
+        self.pub_markers = rospy.Publisher("/filtered_markers", PoseStamped, queue_size=5)
 
         # Subscribers
         self.obs_sub = rospy.Subscriber("/target", Target, self.obs_callback, queue_size=5)
 
         # Main loop
         while not rospy.is_shutdown():
+
+            # publish visualization info on every iteration
+            self.publish_position_markers()
 
             # copy the last received message for the filter update
             self.mutex.acquire()
@@ -158,49 +163,11 @@ class KalmanFilterNode(object):
         """
         self.mutex.acquire()
         self.latest_observation_msg = msg
+        if self.frame_id is None:
+            self.frame_id = self.latest_observation_msg.header.frame_id
+        elif self.frame_id != self.latest_observation_msg.header.frame_id:
+            rospy.logwarn("Did the frame of the observations changed? Check the data!")
         self.mutex.release()
-
-
-    def im_callback(self, msg):
-        """
-        Image callback. Modifies the input image to display the tracked target.
-        Publishes a new image with tracking information.
-        :param msg: input Image message
-        """
-
-        # convert image to opencv
-        try:
-            cv_image = self.bridge.imgmsg_to_cv2(msg, "bgr8")
-        except CvBridgeError as e:
-            print(e)
-
-        # plot observations
-        if not self.observed_positions.empty():
-
-            # make matrix to draw track
-            P = np.int32(list(self.observed_positions.queue))
-
-            # plot
-            cv2.polylines(cv_image, [P], False, [0, 0, 255], 8)
-
-        # plot tracked positions
-        if not self.tracked_positions.empty():
-
-            # make matrix to draw track
-            P = np.int32(list(self.tracked_positions.queue))
-
-            # plot
-            cv2.polylines(cv_image, [P], False, [0, 255, 0], 3)
-
-        # convert CV image to Image message
-        try:
-            image_msg = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
-        except CvBridgeError as e:
-            rospy.logerr(e)
-            return
-
-        # publish tracked path image
-        self.im_pub.publish(image_msg)
 
 
     def store_tracked_state(self, mu, current_stamp):
@@ -222,7 +189,53 @@ class KalmanFilterNode(object):
         msg.pose.position.x = mu[0,0]
         msg.pose.position.y = mu[0,1]
         msg.pose.position.z = mu[0,2]
-        self.pub.publish(msg)
+        self.pub_filtered.publish(msg)
+
+    
+    def publish_position_markers(self):
+        """
+        Publish position markers for the observations and tracked states
+        """
+        if self.frame_id is None:
+            return # can't publish markers without knowing their frame
+
+        def make_marker(queue_obj, identifier, r=1.0, g=1.0, b=1.0, line_thickness=0.2):
+            """
+            Helper function to create marker for a single track of positions
+            :param queue_obj: queue object with position data
+            :param identifier: marker id
+            :param r: red intensity [0,1]
+            :param g: green intensity [0,1]
+            :param b: blue intensity [0,1]
+            """
+            marker = Marker()
+            marker.header.frame_id = self.frame_id
+            marker.type = marker.LINE_STRIP
+            marker.action = marker.ADD
+            marker.scale.x = line_thickness
+            marker.color.a = 1.0
+            marker.color.r = r
+            marker.color.g = g
+            marker.color.b = b
+            marker.points = list(queue_obj.queue)
+            marker.ns = "filtering"
+            marker.id = identifier
+
+        # create marker array object to publish all the tracks at once
+        ma = MarkerArray()
+
+        # create visualization marker for observations -- they will appear white
+        if not self.observed_positions.empty():
+            marker_obs = make_marker(self.observed_positions, 0, 1.0, 1.0, 1.0)
+            ma.markers.append(marker_obs)
+
+        # create visualization marker for filtered (current) positions -- they will appear as thick green lines
+        if not self.tracked_positions.empty():
+            marker_fil = make_marker(self.tracked_positions, 1, 0.0, 1.0, 0.0, 0.5)
+            ma.markers.append(marker_fil)
+
+        # publish marker array
+        self.pub_markers.publish(ma)
 
 
     def store_tracked_obs(self, z):
