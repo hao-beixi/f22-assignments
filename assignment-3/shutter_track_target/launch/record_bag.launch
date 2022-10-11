@@ -1,9 +1,0 @@
-<launch>
-
-     <!-- location for bag -->
-     <arg name="path" default="$(find shutter_track_target)/data"/>
-
-     <!-- record -->
-     <node pkg="rosbag" type="record" name="rosbag_record_data" args="record --duration=300 /tracked_image /observation_image /rosout -O $(arg path)/track_target.bag" output="screen"/>
-
-</launch>

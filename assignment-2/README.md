@@ -883,5 +883,21 @@ as an input argument.
 
     <img src="docs/shutter_noisy_filtering.png" width="480"/>
 
+    **How much should you tune your filter?** To help you answer this question, we have included a test that 
+    measures the average L2 error with respect to the true position of the target. The test passes if 
+    the average error is less than 0.04 meters. You can run the test as follows:
 
-Once you've finished the assignment, **add the commit SHA** that you would like to be evaluate on to your report.
+    ```bash
+    $ rostest shutter_kf_public_tests test_filter_quality.launch
+    ```
+
+    It is expected that assignment submissions will pass a similar test to the one above for all motion trajectories (horizontal, vertical and circular). Note that the above launch file repeats the test up to 4 times to account for randomness in the target generation script. The code passes the test if the average error is less than 0.04 meters for at least one try.
+
+
+## Parts V and VI
+
+Parts V and VI of the assignment are only for students taking CPSC-559 (graduate version of the course). See the tasks/questions in the [ExtraQuestions-CPSC559.md](ExtraQuestions-CPSC559.md) document.
+
+**Once you get to the end of the assignment, remember to commit your code, push to GitHub, and indicate
+in your assignment report the commit SHA for the final version of your code. Your code and report should be submitted to 
+Gradescope.**
