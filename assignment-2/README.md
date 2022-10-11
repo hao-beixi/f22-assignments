@@ -867,13 +867,22 @@ as an input argument.
     `vertical`, `circular`. Run the code as follows:
 
     ```bash
-    $ roslaunch shutter_kf follow_target.launch add_noise:=true
-    path_type:=<path_type>
+    $ roslaunch shutter_kf follow_target.launch add_noise:=true path_type:=<path_type>
     ```
 
     where `<path_type>=[horizontal|vertical|circular]`. No matter which path_type you choose, your filter should track the target
     well (recovering the true target's position as if there was
     no noise). 
 
+    Note that you can see what the `true` position of the target is 
+    when the `add_noise` flag is true by adding a PoseStamped visualization 
+    in rviz for the `/true_target` topic. Then, you should be able to see
+    the (noisy) observation as a red ball, the history filtered positions 
+    as a green line (using the MarkerArray visualization mentioned before),
+    and the true target pose as a set of coordinate axes as follows:
+
+    <img src="docs/shutter_noisy_filtering.png" width="480"/>
+
+    
 
 Once you've finished the assignment, **add the commit SHA** that you would like to be evaluate on to your report.
