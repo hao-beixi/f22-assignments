@@ -883,6 +883,5 @@ as an input argument.
 
     <img src="docs/shutter_noisy_filtering.png" width="480"/>
 
-    
 
 Once you've finished the assignment, **add the commit SHA** that you would like to be evaluate on to your report.

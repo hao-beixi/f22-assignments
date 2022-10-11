@@ -6,10 +6,12 @@
     <arg name="path_type" default="horizontal"/>
     <arg name="add_noise" default="false"/>
     <arg name="follow_target_topic" default="/filtered_target"/>
+    <arg name="headless_sim" default="false"/>
 
     <!-- bring up the robot -->
     <include file="$(find shutter_bringup)/launch/shutter.launch">
         <arg name="simulation" value="true"/>
+        <arg name="headless" value="$(arg headless_sim)"/>
     </include>
 
     <!-- generate the simulated moving object -->

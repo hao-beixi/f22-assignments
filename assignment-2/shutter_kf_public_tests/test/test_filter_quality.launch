@@ -1,0 +1,12 @@
+<launch>
+
+    <!-- run robot simulation -->
+    <include file="$(find shutter_kf)/launch/follow_target.launch">
+        <arg name="add_noise" value="true"/>
+        <arg name="path_type" value="horizontal"/>
+    </include>
+
+    <!-- run tests -->
+    <test test-name="test_filter_quality" pkg="shutter_kf_public_tests" type="test_filter_quality.py"/>
+
+</launch>
