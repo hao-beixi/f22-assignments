@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import rospy
 import numpy as np
+import copy
 
 from shutter_lookat.msg import Target
 from geometry_msgs.msg import PoseStamped
@@ -74,8 +75,9 @@ def generate_target():
     object.x = x_value
 
     # Define publishers
-    vector_pub = rospy.Publisher('/target', Target, queue_size=5)
-    marker_pub = rospy.Publisher('/target_marker', Marker, queue_size=5)
+    vector_pub = rospy.Publisher('/target', Target, queue_size=5)           # observation
+    vector_gt_pub = rospy.Publisher('/true_target', PoseStamped, queue_size=5)   # true target position
+    marker_pub = rospy.Publisher('/target_marker', Marker, queue_size=5)    # visualization for the observation
 
     # Publish the target at a constant ratetarget
     rate = rospy.Rate(publish_rate)
@@ -87,12 +89,16 @@ def generate_target():
         pose_msg.header.frame_id = object.frame
         x, y, z = object.get_obj_coord()
         if add_noise:
-           x = x + np.random.normal(loc=0.0, scale=0.02)
-           y = y + np.random.normal(loc=0.0, scale=0.01)
-           z = z + np.random.normal(loc=0.0, scale=0.01)
-        pose_msg.pose.position.x = x
-        pose_msg.pose.position.y = y
-        pose_msg.pose.position.z = z
+           obs_x = x + np.random.normal(loc=0.0, scale=0.02)
+           obs_y = y + np.random.normal(loc=0.0, scale=0.01)
+           obs_z = z + np.random.normal(loc=0.0, scale=0.01)
+        else:
+           obs_x = x
+           obs_y = y
+           obs_z = z
+        pose_msg.pose.position.x = obs_x
+        pose_msg.pose.position.y = obs_y
+        pose_msg.pose.position.z = obs_z
         pose_msg.pose.orientation.w = 1.0
 
         # Check if current Time exceeds clock speed
@@ -122,6 +128,13 @@ def generate_target():
         marker_msg.scale.y = 2.0*radius
         marker_msg.scale.z = 2.0*radius
         marker_pub.publish(marker_msg)
+
+        # publish true obj position
+        gt_pose_msg = copy.deepcopy(pose_msg)
+        gt_pose_msg.pose.position.x = x
+        gt_pose_msg.pose.position.y = y
+        gt_pose_msg.pose.position.z = z
+        vector_gt_pub.publish(gt_pose_msg)
 
         # update the simulated object state
         object.step()
