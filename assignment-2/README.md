@@ -766,3 +766,14 @@ to load up your model from disk using the model file path and normalization para
 
 Once you've finished the assignment, **add the commit SHA** that you would like to be evaluate on to your report.
 
+
+## Part IV. Real-Time Filtering
+You will now implement a linear Kalman filter to track a visual target in image space. Please read Sections 3.2.1 and 3.2.2 from Chapter 3 of the [Probabilistic Robotics book](http://www.probabilistic-robotics.org/) before starting with 
+this assigment. The Chapter is available in Canvas (under the Files section). Chapters 3.2.1 and 3.2.2 will remind you of how Kalman filters work.
+
+or this assignment, the `filter state` 
+![equation](https://latex.codecogs.com/gif.latex?\bold{x}&space;\in&space;\mathbb{R}^9)<!--$`\bold{x} \in \mathbb{R}^9`$--> should contain ![equation](https://latex.codecogs.com/gif.latex?\bold{x}&space;=&space;[p_x\&space;p_y\&space;p_z\&space;v_x\&space;v_y\&space;v_z\&space;a_x\&space;a_y\&space;a_z]^T)<!--$`\bold{x} = [p_x\ p_y\ p_z\ v_x\ v_y\ v_z\ a_x\ a_y\ a_z]^T`$-->, 
+where ![equation](https://latex.codecogs.com/gif.latex?\mathbf{p}&space;=&space;[p_x\&space;p_y\&space;p_z]^T)<!--$`\mathbf{p} = [p_x\ p_y\ p_z]^T`$--> corresponds to the estimated position of the target in an image, 
+![equation](https://latex.codecogs.com/gif.latex?\mathbf{v}&space;=&space;[v_x\&space;v_y\&space;v_z]^T) <!--$`\mathbf{v} = [v_x\ v_y\ v_z]^T`$--> is its estimated velocity, and ![equation](https://latex.codecogs.com/gif.latex?\mathbf{a}&space;=&space;[a_x\&space;a_y\&space;a_z]^T)<!--$`\mathbf{a} = [a_x\ a_y\ a_z]^T`$--> is its estimated acceleration.
+
+
