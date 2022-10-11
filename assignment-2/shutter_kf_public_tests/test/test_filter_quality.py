@@ -65,7 +65,7 @@ class TestFilterQuality(unittest.TestCase):
         # did we succeed in getting messages?
         self.assertGreaterEqual(len(self.msg_list), 10, 
             f"Got less than 10 sincronized message in 20 secs (num. messages={len(self.msg_list)}).")
-        print(f"Got {len(self.msg_list)} synchronized messages."}
+        print(f"Got {len(self.msg_list)} synchronized messages.")
         
         # compute error
         err = []
