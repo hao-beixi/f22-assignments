@@ -80,10 +80,6 @@ class KalmanFilterNode(object):
 
         # Publishers
         self.pub_filtered = rospy.Publisher("/filtered_target", PoseStamped, queue_size=5)
-<<<<<<< HEAD
-=======
-        self.pub_future = rospy.Publisher("/future_target", PoseStamped, queue_size=5)
->>>>>>> 398d733c68e8ed4dd02759c01d65e269b6fae804
         self.pub_markers = rospy.Publisher("/filtered_markers", MarkerArray, queue_size=5)
 
         # Subscribers
@@ -208,13 +204,13 @@ class KalmanFilterNode(object):
 
         def make_marker(queue_obj, stamp, ns, r=1.0, g=1.0, b=1.0, line_thickness=0.2):
             """                                                                                                                                
-            Helper function to create marker for a single track of positions                                                                   
-            :param queue_obj: queue object with position data                                                                                  
-            :param stamp: stamp for marker                                                                                                     
-            :param identifier: marker id                                                                                                       
-            :param r: red intensity [0,1]                                                                                                      
-            :param g: green intensity [0,1]                                                                                                    
-            :param b: blue intensity [0,1]                                                                                                     
+            Helper function to create marker for a single track of positions
+            :param queue_obj: queue object with position data
+            :param stamp: stamp for marker
+            :param identifier: marker id
+            :param r: red intensity [0,1]
+            :param g: green intensity [0,1]
+            :param b: blue intensity [0,1] 
             """
             list_array = list(queue_obj.queue)
             list_array = [Point(x[0], x[1], x[2]) for x in list_array]
