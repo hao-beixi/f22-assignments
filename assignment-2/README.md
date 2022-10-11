@@ -883,7 +883,7 @@ as an input argument.
 
     <img src="docs/shutter_noisy_filtering.png" width="480"/>
 
-    **How much should you tune your filter?** To help you answer this question, we have included a test that 
+    **How much should you tune your filter?** To help you answer this question, we have included a [test](shutter_kf_public_tests/test/test_filter_quality.py) that 
     measures the average L2 error with respect to the true position of the target. The test passes if 
     the average error is less than 0.04 meters. You can run the test as follows:
 
