@@ -50,7 +50,7 @@ class TestFilterQuality(unittest.TestCase):
         ts = message_filters.ApproximateTimeSynchronizer(subs, 10, 0.25)
         ts.registerCallback(self._callback)
         
-        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(40)  # 20 seconds in the future
+        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(30)  # 30 seconds in the future
 
         # wait patiently for a message
         while not rospy.is_shutdown():
@@ -65,7 +65,8 @@ class TestFilterQuality(unittest.TestCase):
         # did we succeed in getting messages?
         self.assertGreaterEqual(len(self.msg_list), 10, 
             f"Got less than 10 sincronized message in 20 secs (num. messages={len(self.msg_list)}).")
-
+        print(f"Got {len(self.msg_list)} synchronized messages."}
+        
         # compute error
         err = []
         for i in range(len(self.msg_list)):
@@ -81,6 +82,9 @@ class TestFilterQuality(unittest.TestCase):
         std_err = np.std(err)
         self.assertLessEqual(avg_err, 0.5, 
             f"The average error {avg_err} (+- {std_err}) was greater than 0.5.")
+
+        print(f"Avg err={avg_err}")
+        print(f"Std err={std_err}")
 
 
 if __name__ == '__main__':
