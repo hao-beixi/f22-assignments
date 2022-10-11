@@ -409,248 +409,7 @@ script when it finishes running.
 - **I-5.** What happens with the loss per epoch on the training set if you train with a batch size of 1?
 Explain why does the loss per epoch graph look different than with a bigger batch size (e.g., than with a batch size of 100).
 
-## Part II. Building a Face Classifier
-
-Now that you are familiar with training deep learning models, you will create your own face 
-classifier. 
-
-1. Download a subset of the [Face Detection Dataset and Benchmark](http://vis-www.cs.umass.edu/fddb/) 
-from [this link](https://drive.google.com/open?id=1JIIalRu5WZQ01p-S6mBxzHV8ZMqAJcdH) and place it in 
-the `assignment-2/face_detection` directory (note that you should not commit the data to your repository).
-
-   > The data is provided as a [numpy npz file](https://docs.scipy.org/doc/numpy-1.15.1/reference/generated/numpy.savez.html) for this assignment. 
-   The .npz file format is a zipped archive of files named after the variables they contain. 
-   For a description of the .npy format, see [numpy.lib.format](https://numpy.org/doc/stable/reference/generated/numpy.lib.format.html#module-numpy.lib.format).
-
-   Check that you can open the data in python and that it has inputs and target values:
-   
-   ```bash
-   $ cd assignment-2/face_detection/ # go to the assignment-2/face_detection directory within your private repository
-   $ python3 
-   >>> import numpy as np
-   >>> data = np.load("64x64_data.npz")
-   >>> data.files
-   ['input', 'target']
-   >>> image_0 = data['input'][0,:,:,:]
-   >>> 
-   >>> # visualize the first image in the dataset with opencv 
-   >>> import cv2 
-   >>> cv2.imshow("image", image_0)
-   >>> cv2.waitKey(0)
-   ```
-   
-   You should then be able to see the image:
-   
-   <img src="docs/face_example.png" alt="Face example from the dataset"/>
-   
-2. Read the `train_face_detection.py` skeleton code in the `assignment-2/face_detection` directory. 
-This code is provided to get you started on building your custom face classifier. You should be able to run the code
-and load the training data with the following command:
-
-   ```bash
-   $ ./train_face_detection.py --input 64x64_data.npz
-   Loaded 11038 training examples.
-   ```
-   
-   Note that the `input` is organized as a 4-D tensor of dimension NxHxWxC, where N
-   corresponds to the number of examples, H is the height of input images, W is their width, and C
-   is the number of channels per image. In general, the dataset has color images of 64x64 pixels 
-   (i.e., W=H=64 and C=3). The channels are organized in Blue-Green-Red (bgr) order.
-   
-   The `target` is a single number: 1 if the corresponding input image shows a face, or 0 otherwise.
-   Thus, the target tensor is 2D. It has shape Nx1.
-   
-3. Your main task in this assignment is to complete the `main` function of the 
-train_face_detection.py script so that it:
-
-   a. Splits the input data into a training and validation set.
-   
-   b. Normalizes the training data such that the pixel values are floats in [0,1] rather than integers in [0,255]. The normalization logic
-   should be implemented within the `normalize_data_per_row()` function of the `train_face_detection.py` script.
-   
-   c. Builds a convolutional neural network model with TensorFlow's Keras API to predict 
-   whether the input image corresponds to the face of a person or not. The output of the
-   network should be a probability (i.e., a float between 0 and 1) corresponding to the 
-   likelihood that the input image shows a human face.
-   
-   d. Trains the model based on the input arguments: batch_size, epochs, lr, val, logs_dir.
-   These arguments are all defined in the bottom section of the script, when they are
-   added to the [ArgumentParser](https://docs.python.org/3.8/library/argparse.html).
-   
-   The script should have saved one file to disk after finishing training:
-   
-   - **weights.h5:** model parameters. 
-   
-       > We highly recommend that you use the [tf.keras.callbacks.ModelCheckpoint]() function to generate the best weights.h5 
-       file based on validation data, as in Part I of this assignment.
-       
-   Many different convolutional neural networks have been proposed in the past for image classification. 
-   If you are unsure of what model to implement, we suggest that you look at the
-   [Tiny DarkNet Network](https://pjreddie.com/darknet/tiny-darknet/) as a reference. You can implement a
-   small network like that one for this assignment. However, keep in mind that you will have to adjust 
-   the structure of your network according to the input data that is provided.
-   
-   For the loss and metric that you use while training your model, we 
-   suggest that you use `binary_crossentropy` and `binary_accuracy`, respectively. You can set
-   this loss and metric when you compile your model. For example:
-   
-   ```python
-   model.compile(optimizer=tf.keras.optimizers.Adam(lr=learning_rate),
-                 loss='binary_crossentropy',
-                 metrics=['binary_accuracy'])
-   ```
-       
-### Questions / Tasks
-
-- **II-1.** Implement your image classification model in the train_face_detection.py script, and
-train your model using the 64x64_data.npz dataset:
-
-    ```bash
-    $ ./train_face_detection.py --input 64x64_data.npz [--lr 1e-4] [--epochs 100] [--batch_size 200]
-    ```
-
-    Make sure to search for good hyper-parameter values:
-    
-    - **lr:** learning rate
-    - **epochs:** number of epochs to train for
-    - **batch_size:** batch size used for training<br/><br/>
-
-    Commit your modified `train_face_detection.py`
-    script to your repository once you are happy with your model. 
-    **Upload your best weights.h5 file to Google Drive, share the file publicly with "Anyone with a link",
-    and add its URL to the `WEIGHT_FILE_URL` variable at top of the `face_detection/download_weights.py` script.**
-    For example, if your link is `https://drive.google.com/file/d/<file_id>/view?usp=sharing`, then add the 
-    following url download_weights.py: `WEIGHT_FILE_URL=https://drive.google.com/uc?id=<file_id>`
-    
-    To test that your model weights URL is setup properly using the `download_weights.py` script. Run it as:
-    ```bash
-    $ ./download_weights.py
-    ```
-    The script should then download your weights file to your local drive.
-    
-    **NOTE:** The `performance` of your model will be evaluated using the `evaluate_face_detection.py` script
-    within the `assignment-2/face_detection` directory. The script will be run on a test set (that is not provided
-    as part of this assignment) but that you can assume comes from the same image distribution as
-    the data that is provided in the 64x64_data.npz file. The expectation is that your model should
-    reach at least **0.9 (or 90%) binary accuracy** on the (unseen) test set. You can read more about
-    the binary accuracy metric in the [official TensorFlow documentation](https://www.tensorflow.org/versions/r2.6/api_docs/python/tf/keras/metrics/BinaryAccuracy).
-    
-    In general, we recommend that you use [TensorBoard](https://www.tensorflow.org/guide/summaries_and_tensorboard) 
-    to monitor the performance of your model in a validation set as it trains.
-    
-- **II-2.** The binary accuracy metric that you used before, assumed that a face was found when the output
-probability of your network was greater than 0.5 for a given input. But, is this the best threshold 
-to decide that your network found a face? You will now inspect how performance changes as a 
-function of the threshold to better understand if 0.5 is a good value for your classifier.
-
-    To start, make a copy of the evaluate_face_detection.py script and name it `plot_roc_curve.py`:
-
-    ```bash
-    $ cd assignment-2/face_detection
-    $ cp evaluate_face_detection.py plot_roc_curve.py
-    ```
-    
-    Then, edit the new `plot_roc_curve.py` script so that instead of evaluating the model on a given input data,
-    it computes predictions for all of the examples on that input set. Then, based on these predictions and the target values, it plots a 
-    [Receiver Operating Characteristic (ROC)](https://en.wikipedia.org/wiki/Receiver_operating_characteristic) 
-    curve. An example ROC curve is shown below:
-   
-    <img src="docs/roc.png" alt="ROC curve"/>
-        
-    The curve shows the performance of the model based on the True Positive Rate (TPR) and False Positive Rate (FPR), 
-    which are defined as:
-    
-    - **TPR:** The number of correct face predictions over the total number of positive (face) examples
-    in the input data.
-    - **FPR:** The number of false (or incorrect) face predictions over the total number of negative examples in the
-    input data.<br/><br/>
-
-    You should organize the main file of your plot_roc_curve.py script as follows:
-    
-    1. Change the `evaluate()` function so that it returns: a list of TPR values, a list of FPR values, 
-    a list of thresholds, and the index of the best threshold found from the list.
-    2. Add code to the `main()` function to print the best threshold and plot your ROC curve.
-    
-    An example is shown below:
-    
-    ```python
-    # Example code
-    import matplotlib.pyplot as plt
-
-    def evaluate(input_features, target, model):
-        """
-        Helper function to evaluate model
-        :param input_features: input tensor
-        :param target: target tensor
-        :param model: Keras model
-        :return: list of TPR, list of FPR, list of thresholds, index of best threshold as an int
-        """
-        ... # normalize the inputs
-        
-        ... # output model predictions on "prob" variable
-  
-        # generate roc thresholds
-        thresholds = [x/100.0 for x in range(0,100,2)]
-        
-        tpr = [] # list of true positive rate per threshold
-        fpr = [] # list of false positive rate per threshold
-        N = ... # number of examples
-      
-        # compute the true positive rate and the false positive rate for each of the thresholds
-        for t in thresholds:
-      
-            # turn predicted probabilities to 0-1 values based on the threshold
-            prediction = np.zeros(prob.shape)
-            prediction[prob > t] = 1
-          
-            # compute tpr and fpr based on the predictions and the target values from the dataset     
-            # TO-DO. complete
-            current_tpr = ...
-            current_fpr = ...
-  
-            tpr.append(current_tpr)
-            fpr.append(current_fpr)
-          
-        # pick threshold that minimizes l2 distance to top-left corner of the graph (fpr = 0, tpr = 1)
-        # TODO. Complete.
-        index = ... # index of the threshold for which (fpr, tpr) get closest to (0,1) in the Euclidean sense
-        
-        return tpr, fpr, thresholds, index
-  
-    def main(input_file, weights_file):
-        """
-        Evaluate the model on the given input data
-        :param input_file: npz data
-        :param weights_file: path to h5 file with model definition and weights
-        """
-        ... # load data
-  
-        ... # load keras model from file
-        
-        tpr, fpr, thresholds, index = evaluate(input_features, target, model)
-  
-        print("Best threshold was: {} (TPR = {}, FPR = {})".format(thresholds[index], tpr[index], fpr[index]))
-  
-        # plot the ROC curve with matplotlib
-        plt.plot(fpr, tpr)
-        plt.scatter(fpr[index], tpr[index], s=20, c='r')
-        plt.xlabel('False positive rate')
-        plt.ylabel('True positive rate')
-        plt.xlim([0,1])
-        plt.ylim([0,1])
-        plt.title('ROC Curve')
-        plt.show()
-        
-    ```
-    
-    As indicated above, the script should print to the screen the "Best threshold" for predicting faces from the 
-    set ```[x/100.0 for x in range(0,100,2)]```, given the ROC values. You can try your script by running it with the 
-    64x64_data.npz file and your trained model from III-1. 
-    
-    Once your script is working as desired, commit it to your repository. In addition, add to your report the ROC curve that your script 
-    displayed when running on the 64x64_data.npz file and what was the best threshold found given the TRP and FPR values computed for your model. 
-
-## Part III. Imitation Learning (2 potential extra points)
+## Part II. Imitation Learning (2 potential extra points)
 
 In this last part of the assignment, you will gain practical experience with Behavioral Cloning. That is, you will use
 supervised learning to estimate a motion policy for Shutter.
@@ -705,7 +464,7 @@ The output action is 2-dimensional. It corresponds to the new position for the r
 
 ### Questions / Tasks
 
-- **III-1.** Generate data for behavioral cloning as explained in the prior section, and implement a script to learn
+- **II-1.** Generate data for behavioral cloning as explained in the prior section, and implement a script to learn
 an imitation policy from this data using the TensorFlow Keras API. The script should be called `learn_policy.py` and 
 be placed within the `assignment-2/shutter_behavior_cloining/scripts` directory. 
 
@@ -733,7 +492,7 @@ be placed within the `assignment-2/shutter_behavior_cloining/scripts` directory.
     `https://drive.google.com/file/d/<file_id>/view?usp=sharing`, then you should add 
     `https://drive.google.com/uc?id=<file_id>` to the script for the evaluation with Gradescope to run successfully.
     
-- **III-2.** Complete the `assignment-2/shutter_behavior_cloining/scripts/run_policy.py` script so that it loads up 
+- **II-2.** Complete the `assignment-2/shutter_behavior_cloining/scripts/run_policy.py` script so that it loads up 
 your model and computes new poses for Shutter to follow the target. More specifically, update lines 26-28 in the script
 to load up your model from disk using the model file path and normalization params provided to the node via:
     ```python
@@ -764,7 +523,7 @@ to load up your model from disk using the model file path and normalization para
     expected to get extra points for this part of the assignment (one enrolled in 459 and one in 559).
     
 
-## Part IV. Real-Time Filtering
+## Part III. Real-Time Filtering
 You will now implement a linear Kalman filter to track the moving target in front of the robot. Please read Sections 3.2.1 and 3.2.2 from Chapter 3 of the [Probabilistic Robotics book](http://www.probabilistic-robotics.org/) before starting with 
 this assigment. The Chapter is available in Canvas (under the Files section). Chapters 3.2.1 and 3.2.2 will remind you of how Kalman filters work.
 
@@ -793,27 +552,27 @@ the main logic for a filtering node, and will help you debug your filter visuall
 
 ### Questions / Tasks
 
-- **IV-1.** Please write down the mathematical equation for the filter's linear transition model, including
+- **III-1.** Please write down the mathematical equation for the filter's linear transition model, including
 Gaussian noise, in your report. Note that because you are not in control of the target's motion, but tracking will be
 happening only based on the observed target position, your filter's transition model should have no control ![equation](https://latex.codecogs.com/gif.latex?\bold{u}) <!--$`\bold{u}`$--> component.
 
-- **IV-2.** Please write down the mathematical equation for the filter's measurement model, including Gaussian
+- **III-2.** Please write down the mathematical equation for the filter's measurement model, including Gaussian
 noise, in your report.
 
-- **IV-3.** Please write down the mathematical equation that defines the Kalman gain in your report.
+- **III-3.** Please write down the mathematical equation that defines the Kalman gain in your report.
 
-- **IV-4.** What happens with the values in the Kalman gain if the covariance ![equation](https://latex.codecogs.com/gif.latex?Q)<!--$`Q`$--> for the measurement noise 
+- **III-4.** What happens with the values in the Kalman gain if the covariance ![equation](https://latex.codecogs.com/gif.latex?Q)<!--$`Q`$--> for the measurement noise 
 grows?
 
-- **IV-5.** Complete the `KF_predict_step()` function at the top of the
+- **III-5.** Complete the `KF_predict_step()` function at the top of the
 [kalman_filter.py](https://github.com/Yale-BIM/f22-assignments/blob/master/assignment-2/shutter_kf/scripts/kalman_filter.py) script such that it predicts a new belief for the state (encoded by its mean and covariance) based
 on the prior belief and the transition model of the filter.
 
-- **IV-6.** Complete the `KF_measurement_update_step()` function in the [kalman_filter.py](https://github.com/Yale-BIM/f22-assignments/blob/master/assignment-2/shutter_kf/scripts/kalman_filter.py) script such that
+- **III-6.** Complete the `KF_measurement_update_step()` function in the [kalman_filter.py](https://github.com/Yale-BIM/f22-assignments/blob/master/assignment-2/shutter_kf/scripts/kalman_filter.py) script such that
 it corrects the belief of the state of the filter based on the latest observation and the filter's
 measurement model.
 
-- **IV-7.** Implement the `assemble_A_matrix()` and `assemble_C_matrix()` methods within the `KalmanFilterNode`
+- **III-7.** Implement the `assemble_A_matrix()` and `assemble_C_matrix()` methods within the `KalmanFilterNode`
 class of the [kalman_filter.py](https://github.com/Yale-BIM/f22-assignments/blob/master/assignment-2/shutter_kf/scripts/kalman_filter.py) script. The methods should set the A and C
 parameters of the transition and measurement model of the filter used by the `KalmanFilterNode`. Use [numpy
 arrays](https://docs.scipy.org/doc/numpy-1.15.1/reference/generated/numpy.array.html) to represent the A and C matrices.
@@ -821,13 +580,13 @@ arrays](https://docs.scipy.org/doc/numpy-1.15.1/reference/generated/numpy.array.
     > NOTE: You do not have to implement the logic that passes the A and C parameters to the filter. This is
     already done for you in the main loop of the KalmanFilterNode class.
     
-- **IV-8.** Implement the `initialize_process_covariance()` and `initialize_measurement_covariance()` methods
+- **III-8.** Implement the `initialize_process_covariance()` and `initialize_measurement_covariance()` methods
 within the `KalmanFilterNode` class of the [kalman_filter.py](https://github.com/Yale-BIM/f22-assignments/blob/master/assignment-2/shutter_kf/scripts/kalman_filter.py) script. These methods should set some fixed value
 for the Q and R covariances
 for the noise of the transition model and measurement model, respectively. Don't worry too much about the
 exact values that you set for the noise now, as you will have to tune these values later in the assignment.
 
-- **IV-9.** Implement the `assemble_observation_vector()` function within the `KalmanFilterNode` class of the
+- **III-9.** Implement the `assemble_observation_vector()` function within the `KalmanFilterNode` class of the
 [kalman_filter.py](https://github.com/Yale-BIM/f22-assignments/blob/master/assignment-2/shutter_kf/scripts/kalman_filter.py) script. This function should return a vector (numpy array) with the observed position for the
 target. 
  
@@ -835,12 +594,12 @@ target.
     an Observation message argument. This argument provides the latest observed position of the target as received
     through the `/target` topic in the `KalmanFilterNode`.
 
-- **IV-10.** Implement the `initialize_mu_and_sigma()` method within the `KalmanFilterNode` class of the
+- **III-10.** Implement the `initialize_mu_and_sigma()` method within the `KalmanFilterNode` class of the
 [kalman_filter.py](https://github.com/Yale-BIM/f22-assignments/blob/master/assignment-2/shutter_kf/scripts/kalman_filter.py) script. This method should set the initial values for the filter belief based on the latest
 observed target position. Again, note that this observation is passed to the `initialize_mu_and_sigma()` method
 as an input argument.
 
-- **IV-11.** Once you have finished the prior tasks, run:
+- **III-11.** Once you have finished the prior tasks, run:
 
     ```bash
     $ roslaunch shutter_kf follow_target.launch
@@ -894,9 +653,9 @@ as an input argument.
     It is expected that assignment submissions will pass a similar test to the one above for all motion trajectories (horizontal, vertical and circular). Note that the above launch file repeats the test up to 4 times to account for randomness in the target generation script. The code passes the test if the average error is less than 0.04 meters for at least one try.
 
 
-## Parts V and VI
+## Parts IV and V
 
-Parts V and VI of the assignment are only for students taking CPSC-559 (graduate version of the course). See the tasks/questions in the [ExtraQuestions-CPSC559.md](ExtraQuestions-CPSC559.md) document.
+Parts IV and V of the assignment are only for students taking CPSC-559 (graduate version of the course). See the tasks/questions in the [ExtraQuestions-CPSC559.md](ExtraQuestions-CPSC559.md) document.
 
 **Once you get to the end of the assignment, remember to commit your code, push to GitHub, and indicate
 in your assignment report the commit SHA for the final version of your code. Your code and report should be submitted to 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Public tests for CPSC459/559 Assignment 2 - Part IV
+# Public tests for CPSC459/559 Assignment 2 - Part III
 
 PKG = "shutter_kf_public_tests"
 NAME = 'test_filter_quality'
