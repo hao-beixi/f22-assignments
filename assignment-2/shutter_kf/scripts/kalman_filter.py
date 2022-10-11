@@ -244,7 +244,7 @@ class KalmanFilterNode(object):
             end_marker.color.g = g
             end_marker.color.b = b
             end_marker.pose.orientation.w = 1.0
-            end_marker.pose.position = list_array[0]
+            end_marker.pose.position = list_array[-1]
             end_marker.ns = ns
             end_marker.id = 1
 
