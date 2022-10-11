@@ -7,6 +7,7 @@
     <arg name="add_noise" default="false"/>
     <arg name="follow_target_topic" default="/filtered_target"/>
     <arg name="headless_sim" default="false"/>
+    <arg name="fast_target" default="false"/>
 
     <!-- bring up the robot -->
     <include file="$(find shutter_bringup)/launch/shutter.launch">
@@ -19,6 +20,7 @@
 	  <param name="publish_rate" value="$(arg publish_rate)"/>
       <param name="path_type" value="$(arg path_type)"/>
       <param name="add_noise" value="$(arg add_noise)"/>
+      <param name="fast" value="$(arg fast_target)"/>
     </node>
 
     <!-- visualize the moving object in rviz -->

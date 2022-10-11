@@ -7,6 +7,6 @@
     </include>
 
     <!-- run tests -->
-    <test test-name="test_filter_quality" pkg="shutter_kf_public_tests" type="test_filter_quality.py"/>
+    <test test-name="test_filter_quality" pkg="shutter_kf_public_tests" type="test_filter_quality.py" retry="3" time-limit="72.0"/>
 
 </launch>

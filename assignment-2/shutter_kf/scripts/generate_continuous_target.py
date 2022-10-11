@@ -25,13 +25,18 @@ class SimulatedObject(object):
         self.radius = 0.5               # radius of the object's circular path
         self.frame = "base_footprint"   # frame in which the coordinates of the object are computed
         self.path_type = "circular"     # type of motion: circular, horizontal, vertical 
+        self.fast = False               # fast moving target?
 
     def step(self):
         """
         Update the position of the target based on the publishing rate of the node
         :param publish_rate: node's publish rate
         """
-        self.angle += 2.0 * np.pi / 300  # 1 full revolution in 10 secs at 30 Hz
+        if self.fast:
+            denom = 150.0 # 1 full revolution in 5 secs at 30 Hz
+        else:
+            denom = 300.0
+        self.angle += 2.0 * np.pi / denom  
 
     def get_obj_coord(self):
         if self.path_type == "circular":
@@ -66,12 +71,14 @@ def generate_target():
     radius = rospy.get_param("~radius", default=0.1)
     publish_rate = rospy.get_param("~publish_rate", default=30)
     path_type = rospy.get_param("~path_type", default="horizontal")
-    add_noise = rospy.get_param('~add_noise', False)             # add noise to the target observations? (only set to true for the last part of the assignment!)
+    add_noise = rospy.get_param('~add_noise', default=False)     # add noise to the target observations? (only set to true for the last part of the assignment!)
+    fast = rospy.get_param('~fast', default=False)               # Make the target move fast?
     timestamp_buffer = None
 
     # Create the simulated object
     object = SimulatedObject()
     object.path_type = path_type
+    object.fast = fast
     object.x = x_value
 
     # Define publishers
@@ -89,9 +96,9 @@ def generate_target():
         pose_msg.header.frame_id = object.frame
         x, y, z = object.get_obj_coord()
         if add_noise:
-           obs_x = x + np.random.normal(loc=0.0, scale=0.02)
-           obs_y = y + np.random.normal(loc=0.0, scale=0.01)
-           obs_z = z + np.random.normal(loc=0.0, scale=0.01)
+           obs_x = x + np.random.normal(loc=0.0, scale=0.05)
+           obs_y = y + np.random.normal(loc=0.0, scale=0.05)
+           obs_z = z + np.random.normal(loc=0.0, scale=0.03)
         else:
            obs_x = x
            obs_y = y

@@ -121,11 +121,6 @@ class KalmanFilterNode(object):
             # save the time of when we made the prediction
             last_time = current_time
 
-            # make more future predictions? (only for CPSC 559)
-            tmp_mu = copy.deepcopy(self.mu)
-            tmp_sigma = copy.deepcopy(self.Sigma)
-            self.future_predictions(tmp_mu, tmp_sigma, current_time)
-
             # don't correct the state if we don't have a new observation
             if obs_msg is None:
 
@@ -331,17 +326,6 @@ class KalmanFilterNode(object):
         """
         # TODO. Complete. Build the numpy array z such that it corresponds to the observed target location.
         return z
-
-    
-    def future_predictions(self, mu, sigma, current_stamp):
-        """
-        Store tracked state and publish result
-        :param mu: state (position and vel)
-        :param sigma: covariance
-        :param current_stamp: stamp for when the last prediction was made
-        """
-        # TODO. Complete (for 559). Write prediction code and publish /future_target message
-        pass
 
 
 if __name__ == '__main__':

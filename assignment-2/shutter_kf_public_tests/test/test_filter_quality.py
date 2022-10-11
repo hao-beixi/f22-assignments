@@ -80,7 +80,7 @@ class TestFilterQuality(unittest.TestCase):
 
         avg_err = np.mean(err)
         std_err = np.std(err)
-        self.assertLessEqual(avg_err, 0.5, 
+        self.assertLessEqual(avg_err, 0.04, 
             f"The average error {avg_err} (+- {std_err}) was greater than 0.5.")
 
         print(f"Avg err={avg_err}")
