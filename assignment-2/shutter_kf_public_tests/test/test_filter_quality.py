@@ -40,6 +40,8 @@ class TestFilterQuality(unittest.TestCase):
         """
         Check that the information is being published on /virtual_camera/camera_info
         """
+        rospy.sleep(2)
+
         self.msg_list = []
 
         sub1 = message_filters.Subscriber(self.filtered_topic, PoseStamped)

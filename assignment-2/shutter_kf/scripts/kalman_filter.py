@@ -204,13 +204,13 @@ class KalmanFilterNode(object):
 
         def make_marker(queue_obj, stamp, ns, r=1.0, g=1.0, b=1.0, line_thickness=0.2):
             """                                                                                                                                
-            Helper function to create marker for a single track of positions
-            :param queue_obj: queue object with position data
-            :param stamp: stamp for marker
-            :param identifier: marker id
-            :param r: red intensity [0,1]
-            :param g: green intensity [0,1]
-            :param b: blue intensity [0,1] 
+            Helper function to create marker for a single track of positions                                                                   
+            :param queue_obj: queue object with position data                                                                                  
+            :param stamp: stamp for marker                                                                                                     
+            :param identifier: marker id                                                                                                       
+            :param r: red intensity [0,1]                                                                                                      
+            :param g: green intensity [0,1]                                                                                                    
+            :param b: blue intensity [0,1]                                                                                                     
             """
             list_array = list(queue_obj.queue)
             list_array = [Point(x[0], x[1], x[2]) for x in list_array]
@@ -230,7 +230,25 @@ class KalmanFilterNode(object):
             marker.points = list_array
             marker.ns = ns
             marker.id = 0
-            return marker
+
+            end_marker = Marker()
+            end_marker.header.stamp = stamp
+            end_marker.header.frame_id = self.frame_id
+            end_marker.type = end_marker.SPHERE
+            end_marker.action = end_marker.ADD
+            end_marker.scale.x = line_thickness*2
+            end_marker.scale.y = line_thickness*2
+            end_marker.scale.z = line_thickness*2
+            end_marker.color.a = 1.0
+            end_marker.color.r = r
+            end_marker.color.g = g
+            end_marker.color.b = b
+            end_marker.pose.orientation.w = 1.0
+            end_marker.pose.position = list_array[0]
+            end_marker.ns = ns
+            end_marker.id = 1
+
+            return marker, end_marker
 
         # create marker array object to publish all the tracks at once
         ma = MarkerArray()
@@ -238,13 +256,14 @@ class KalmanFilterNode(object):
 
         # create visualization marker for observations -- they will appear white
         if not self.observed_positions.empty():
-            marker_obs = make_marker(self.observed_positions, s, "observations", 1.0, 1.0, 1.0, 0.03)
+            marker_obs, _ = make_marker(self.observed_positions, s, "observations", 1.0, 1.0, 1.0, 0.03)
             ma.markers.append(marker_obs)
 
         # create visualization marker for filtered (current) positions -- they will appear as thick green lines
         if not self.tracked_positions.empty():
-            marker_fil = make_marker(self.tracked_positions, s, "filtered", 0.0, 1.0, 0.0, 0.01)
+            marker_fil, end_marker_fil = make_marker(self.tracked_positions, s, "filtered", 0.0, 1.0, 0.0, 0.01)
             ma.markers.append(marker_fil)
+            ma.markers.append(end_marker_fil)
 
         # publish marker array
         self.pub_markers.publish(ma)
@@ -307,8 +326,8 @@ class KalmanFilterNode(object):
     def assemble_observation_vector(self, obs_msg):
         """
         Build the observation vector as a numpy array with the data from the Observation message
-        :param obs_msg: latest Observation message that has been received by the node
-        :return: numpy array representing the observation vector
+        :param obs_msg: latest Target message that has been received by the node
+        :return: numpy array representing the observation vector (with the 3D position of the target)
         """
         # TODO. Complete. Build the numpy array z such that it corresponds to the observed target location.
         return z
