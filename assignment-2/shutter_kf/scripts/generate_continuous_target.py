@@ -21,7 +21,7 @@ class SimulatedObject(object):
         self.center_y = 0.0             # y coordinate for the center of the object's path
         self.center_z = 0.50            # z coordinate for the center of the object's path
         self.angle = 0.0                # current angle for the object in its circular path (relative to the y axis)
-        self.radius = 0.1               # radius of the object's circular path
+        self.radius = 0.5               # radius of the object's circular path
         self.frame = "base_footprint"   # frame in which the coordinates of the object are computed
         self.path_type = "circular"     # type of motion: circular, horizontal, vertical 
 
@@ -65,6 +65,7 @@ def generate_target():
     radius = rospy.get_param("~radius", default=0.1)
     publish_rate = rospy.get_param("~publish_rate", default=30)
     path_type = rospy.get_param("~path_type", default="horizontal")
+    add_noise = rospy.get_param('~add_noise', False)             # add noise to the target observations? (only set to true for the last part of the assignment!)
     timestamp_buffer = None
 
     # Create the simulated object
@@ -84,9 +85,14 @@ def generate_target():
         pose_msg = PoseStamped()
         pose_msg.header.stamp = rospy.Time.now()
         pose_msg.header.frame_id = object.frame
-        pose_msg.pose.position.x = object.x
-        pose_msg.pose.position.y = object.center_y + np.sin(object.angle)*object.radius
-        pose_msg.pose.position.z = object.center_z + np.cos(object.angle)*object.radius
+        x, y, z = object.get_obj_coord()
+        if add_noise:
+           x = x + np.random.normal(loc=0.0, scale=0.02)
+           y = y + np.random.normal(loc=0.0, scale=0.01)
+           z = z + np.random.normal(loc=0.0, scale=0.01)
+        pose_msg.pose.position.x = x
+        pose_msg.pose.position.y = y
+        pose_msg.pose.position.z = z
         pose_msg.pose.orientation.w = 1.0
 
         # Check if current Time exceeds clock speed

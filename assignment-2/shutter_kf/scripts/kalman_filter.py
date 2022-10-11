@@ -7,8 +7,8 @@ import numpy as np
 import rospy
 from shutter_lookat.msg import Target
 from geometry_msgs.msg import PoseStamped
-from cv_bridge import CvBridge, CvBridgeError
 from visualization_msgs.msg import Marker, MarkerArray
+from geometry_msgs.msg import Point
 
 from threading import Lock
 
@@ -56,7 +56,6 @@ class KalmanFilterNode(object):
 
         # Note parameters
         frame_rate = rospy.get_param("~frame_rate", 20)        # fps
-        future_steps = rospy.get_param("~future_steps", 20)    # how many steps to make a prediction into the future
 
         # Filter variables
         self.mu = None                                     # state mean
@@ -75,15 +74,13 @@ class KalmanFilterNode(object):
         self.frame_id = None                               # frame id for the observations and filtering
         self.latest_observation_msg = None                 # latest PointStamped observation that was received by the node
         self.mutex = Lock()                                # mutex for the observation
-        self.bridge = CvBridge()                           # OpenCV - ROS bridge
         self.observed_positions = queue.Queue(50)          # FIFO queue of observed positions (for visualization)
         self.tracked_positions = queue.Queue(50)           # FIFO queue of tracked positions (for visualization)
         last_time = None                                   # Last time-stamp of when a filter update was done
 
         # Publishers
         self.pub_filtered = rospy.Publisher("/filtered_target", PoseStamped, queue_size=5)
-        self.pub_future = rospy.Publisher("/future_target", PoseStamped, queue_size=5)
-        self.pub_markers = rospy.Publisher("/filtered_markers", PoseStamped, queue_size=5)
+        self.pub_markers = rospy.Publisher("/filtered_markers", MarkerArray, queue_size=5)
 
         # Subscribers
         self.obs_sub = rospy.Subscriber("/target", Target, self.obs_callback, queue_size=5)
@@ -112,7 +109,7 @@ class KalmanFilterNode(object):
 
             # compute elapsed time from last prediction
             current_time = rospy.Time.now()
-            delta_t = (current_time - obs_msg.header.stamp).to_sec()
+            delta_t = (current_time - last_time).to_sec()
             assert delta_t >= 0, "Negative delta_t = {}?".format(delta_t) # sanity check!
 
             # assemble A matrix: helps generate new state from prior state and elapsed time
@@ -162,11 +159,16 @@ class KalmanFilterNode(object):
         :param msg: PointStamped message with (x,y) location observation from the image
         """
         self.mutex.acquire()
+
+        # save observation
         self.latest_observation_msg = msg
+
+        # save obs frame
         if self.frame_id is None:
-            self.frame_id = self.latest_observation_msg.header.frame_id
-        elif self.frame_id != self.latest_observation_msg.header.frame_id:
+            self.frame_id = self.latest_observation_msg.pose.header.frame_id
+        elif self.frame_id != self.latest_observation_msg.pose.header.frame_id:
             rospy.logwarn("Did the frame of the observations changed? Check the data!")
+
         self.mutex.release()
 
 
@@ -181,14 +183,15 @@ class KalmanFilterNode(object):
         if self.tracked_positions.full():
             self.tracked_positions.get_nowait()
 
-        self.tracked_positions.put_nowait(mu[:2, 0].transpose())
+        self.tracked_positions.put_nowait(mu[:3, 0])
 
         # published filtered state
         msg = PoseStamped()
         msg.header.stamp = current_stamp
+        msg.header.frame_id = self.frame_id
         msg.pose.position.x = mu[0,0]
-        msg.pose.position.y = mu[0,1]
-        msg.pose.position.z = mu[0,2]
+        msg.pose.position.y = mu[1,0]
+        msg.pose.position.z = mu[2,0]
         self.pub_filtered.publish(msg)
 
     
@@ -196,42 +199,51 @@ class KalmanFilterNode(object):
         """
         Publish position markers for the observations and tracked states
         """
-        if self.frame_id is None:
-            return # can't publish markers without knowing their frame
+        if self.frame_id is None or (self.observed_positions.empty() and self.tracked_positions.empty()):
+            return # can't publish markers without knowing their frame or without data
 
-        def make_marker(queue_obj, identifier, r=1.0, g=1.0, b=1.0, line_thickness=0.2):
+        def make_marker(queue_obj, stamp, ns, r=1.0, g=1.0, b=1.0, line_thickness=0.2):
+            """                                                                                                                                
+            Helper function to create marker for a single track of positions                                                                   
+            :param queue_obj: queue object with position data                                                                                  
+            :param stamp: stamp for marker                                                                                                     
+            :param identifier: marker id                                                                                                       
+            :param r: red intensity [0,1]                                                                                                      
+            :param g: green intensity [0,1]                                                                                                    
+            :param b: blue intensity [0,1]                                                                                                     
             """
-            Helper function to create marker for a single track of positions
-            :param queue_obj: queue object with position data
-            :param identifier: marker id
-            :param r: red intensity [0,1]
-            :param g: green intensity [0,1]
-            :param b: blue intensity [0,1]
-            """
+            list_array = list(queue_obj.queue)
+            list_array = [Point(x[0], x[1], x[2]) for x in list_array]
             marker = Marker()
+            marker.header.stamp = stamp
             marker.header.frame_id = self.frame_id
             marker.type = marker.LINE_STRIP
             marker.action = marker.ADD
             marker.scale.x = line_thickness
+            marker.scale.y = line_thickness
+            marker.scale.z = line_thickness
             marker.color.a = 1.0
             marker.color.r = r
             marker.color.g = g
             marker.color.b = b
-            marker.points = list(queue_obj.queue)
-            marker.ns = "filtering"
-            marker.id = identifier
+            marker.pose.orientation.w = 1.0
+            marker.points = list_array
+            marker.ns = ns
+            marker.id = 0
+            return marker
 
         # create marker array object to publish all the tracks at once
         ma = MarkerArray()
+        s = rospy.Time.now()
 
         # create visualization marker for observations -- they will appear white
         if not self.observed_positions.empty():
-            marker_obs = make_marker(self.observed_positions, 0, 1.0, 1.0, 1.0)
+            marker_obs = make_marker(self.observed_positions, s, "observations", 1.0, 1.0, 1.0, 0.03)
             ma.markers.append(marker_obs)
 
         # create visualization marker for filtered (current) positions -- they will appear as thick green lines
         if not self.tracked_positions.empty():
-            marker_fil = make_marker(self.tracked_positions, 1, 0.0, 1.0, 0.0, 0.5)
+            marker_fil = make_marker(self.tracked_positions, s, "filtered", 0.0, 1.0, 0.0, 0.01)
             ma.markers.append(marker_fil)
 
         # publish marker array
@@ -239,12 +251,15 @@ class KalmanFilterNode(object):
 
 
     def store_tracked_obs(self, z):
-
+        """
+        Store observations in queue
+        :param z: latest observation
+        """
         # build list of observed positions so that we can compared observed vs. tracked positions
         if self.observed_positions.full():
             self.observed_positions.get_nowait()
 
-        self.observed_positions.put_nowait(z.transpose())
+        self.observed_positions.put_nowait(z[:,0].transpose())
 
 
     def assemble_A_matrix(self, delta_t):

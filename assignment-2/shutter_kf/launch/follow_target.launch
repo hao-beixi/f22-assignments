@@ -4,7 +4,8 @@
     <arg name="look_forward" value="True"/>
     <arg name="publish_rate" default="30"/>
     <arg name="path_type" default="horizontal"/>
-    <arg name="follow_target" default="false"/>
+    <arg name="add_noise" default="false"/>
+    <arg name="follow_target_topic" default="/filtered_target"/>
 
     <!-- bring up the robot -->
     <include file="$(find shutter_bringup)/launch/shutter.launch">
@@ -15,6 +16,7 @@
     <node name="generate_continuous_target" pkg="shutter_kf" type="generate_continuous_target.py" output="screen">
 	  <param name="publish_rate" value="$(arg publish_rate)"/>
       <param name="path_type" value="$(arg path_type)"/>
+      <param name="add_noise" value="$(arg add_noise)"/>
     </node>
 
     <!-- visualize the moving object in rviz -->
@@ -30,11 +32,9 @@
     </node>
 
     <!-- make the robot follow the filtered target -->
-    <group if="$(arg follow_target)">
-        <node name="expert_opt" pkg="shutter_behavior_cloning" type="expert_opt.py" output="screen">
-            <param name="save_state_actions" value="False"/>
-            <remap from="/target" to="/future_target"/>
-        </node>
-    </group>
+    <node name="expert_opt" pkg="shutter_behavior_cloning" type="expert_opt.py" output="screen">
+        <param name="save_state_actions" value="False"/>
+        <remap from="/target" to="$(arg follow_target_topic)"/>
+    </node>
 
 </launch>
