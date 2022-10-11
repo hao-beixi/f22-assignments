@@ -80,6 +80,10 @@ class KalmanFilterNode(object):
 
         # Publishers
         self.pub_filtered = rospy.Publisher("/filtered_target", PoseStamped, queue_size=5)
+<<<<<<< HEAD
+=======
+        self.pub_future = rospy.Publisher("/future_target", PoseStamped, queue_size=5)
+>>>>>>> 398d733c68e8ed4dd02759c01d65e269b6fae804
         self.pub_markers = rospy.Publisher("/filtered_markers", MarkerArray, queue_size=5)
 
         # Subscribers
