@@ -48,7 +48,7 @@ class TestFilterQuality(unittest.TestCase):
         ts = message_filters.ApproximateTimeSynchronizer(subs, 10, 0.25)
         ts.registerCallback(self._callback)
         
-        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(20)  # 20 seconds in the future
+        timeout_t = rospy.Time.now() + rospy.Duration.from_sec(40)  # 20 seconds in the future
 
         # wait patiently for a message
         while not rospy.is_shutdown():
@@ -61,7 +61,8 @@ class TestFilterQuality(unittest.TestCase):
             s.sub.unregister()
 
         # did we succeed in getting messages?
-        self.assertTrue(len(self.msg_list) > 10, "Got more than 10 sincronized message in 20 secs.")
+        self.assertGreaterEqual(len(self.msg_list), 10, 
+            f"Got less than 10 sincronized message in 20 secs (num. messages={len(self.msg_list)}).")
 
         # compute error
         err = []
