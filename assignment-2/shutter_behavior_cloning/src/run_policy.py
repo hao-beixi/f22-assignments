@@ -5,6 +5,7 @@ from sensor_msgs.msg import JointState
 from geometry_msgs.msg import PoseStamped
 from std_msgs.msg import Float64
 from urdf_parser_py.urdf import URDF
+from std_msgs.msg import Float64MultiArray
 
 
 class RunPolicyNode(object):
@@ -102,7 +103,7 @@ class RunPolicyNode(object):
             return
         else:
             # upack result
-            new_j1, new_j3 = joint_angles
+            new_j1, new_j3 = joint_positions
 
         # publish command
         msg = Float64MultiArray()
