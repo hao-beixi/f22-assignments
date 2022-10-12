@@ -87,11 +87,11 @@ to Google Drive and share them with anybody who has access to the links.
 
 You assignment will be evaluated based on the content of your report and your code.
 
-- Report (52 pts)
+- Report (52 pts for CPSC 459 / 72 pts for CPSC 559)
     * Part I (32 pts): I-1 (8 pts) + I-3 (8 pts) + I-4 (10 pts) + I-5 (6 pts)
     * Part III (20 pts): IV-1 (5 pts) + IV-2 (5 pts) + IV-3 (5 pts) + IV-4 (5 pts)
     * Part V (20 pts for CPSC-559 only): IV-1 (7 pts) + IV-2 (5 pts) + IV-3 (8 pts)
-- Code (128 pts)
+- Code (128 pts for CPSC 459 / 148 pts for CPSC 559)
     * Part I (20 pts): I-1 (4 pts) + I-2 (6 pts) + I-3 (10 pts)
     * Part II (54 pts): III-1 (34 pts) + III-2 (20 pts)
     * Part III (54 pts): IV-5 (8 pts) + IV-6 (8 pts) + IV-7 (6 pts) + IV-8 (6 pts) + IV-9 (4 pts) + IV-10 (6 pts) + IV-11 (16 pts) 
