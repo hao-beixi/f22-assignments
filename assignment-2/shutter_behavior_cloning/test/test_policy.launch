@@ -7,7 +7,9 @@
     <arg name="normp" default=""/> <!-- change this to your normalization parameters file if you are using one -->
 
     <!-- bring up the robot -->
-    <include file="$(find shutter_bringup)/launch/shutter_sim.launch" />
+    <include file="$(find shutter_bringup)/launch/shutter.launch">
+        <arg name="simulation" value="true"/>
+    </include>
 
     <!-- visualize the moving object in rviz -->
     <group if="$(arg run_rviz)">

@@ -154,6 +154,8 @@ class TestPolicy(unittest.TestCase, ExpertNode):
         # setup node connections
         rospy.Subscriber('/joint_states', JointState, self.joints_callback, queue_size=5)
 
+        rospy.sleep(3)
+
         # tf subscriber
         self.tf_buffer = tf2_ros.Buffer(rospy.Duration(1200.0))  # tf buffer length
         self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
@@ -177,15 +179,22 @@ class TestPolicy(unittest.TestCase, ExpertNode):
         :param msg: joint state
         """
         joint1_idx = -1
+        joint2_idx = -1
         joint3_idx = -1
+        joint4_idx = -1
         for i in range(len(msg.name)):
             if msg.name[i] == 'joint_1':
                 joint1_idx = i
+            elif msg.name[i] == 'joint_2':
+                joint2_idx = i
             elif msg.name[i] == 'joint_3':
                 joint3_idx = i
-        assert joint1_idx >= 0 and joint3_idx > 0, \
-            "Missing joints from joint state! joint1 = {}, joint3 = {}".format(joint1_idx, joint3_idx)
-
+            elif msg.name[i] == 'joint_4':
+                joint4_idx = i
+        assert joint1_idx >= 0 and joint2_idx >= 0 and joint3_idx >= 0 and joint4_idx >= 0, \
+            "Missing joints from joint state! joint1 = {}, joint2 = {}, joint3 = {}, joint4 = {}".\
+                format(joint1_idx, joint2_idx, joint3_idx, joint4_idx)
+                
         with self.joints_mutex:
             if not self.record_joints:  # empty the queue so that it's only size 1; otherwise, grow the queue
                 self.joints_1 = []
@@ -230,7 +239,7 @@ class TestPolicy(unittest.TestCase, ExpertNode):
         # get solution from expert
         self.joint1 = self.joints_1[-1]
         self.joint3 = self.joints_3[-1]
-        solution = self.compute_joints_position(pose_msg)
+        solution = self.compute_joints_position(pose_msg, self.joint1, self.joint3)
         if solution is None:
             rospy.logerr("Failed to compute expert's solution for target {}".format((x, y, z)))
             return None, None, self.err['NO_EXPERT_SOLUTION']
