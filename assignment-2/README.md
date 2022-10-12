@@ -103,12 +103,6 @@ Students taking CPSC-459 will be evaluated over 180 pts. Those taking CPSC-559, 
 The extra credit (2 pts) will be counted for the final course grade 
 (over 100 pts for this assignment). 
 
-#### Further Reading
-
-Below are some example Neural Networks to give you a starting point for implementing your own:
-- [SqueezeNet](https://arxiv.org/abs/1602.07360) - A small network for image classification
-- [Tiny Darknet](https://pjreddie.com/darknet/tiny-darknet/) - An even smaller network for image classification
-
 ## Setup
 Before you start implementing or answering questions for this assignment, please
 check that [pip3](https://pip.pypa.io/en/stable/) is installed in your machine:
