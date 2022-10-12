@@ -152,13 +152,8 @@ $ python3 -c "import tensorflow as tf; print(tf.__version__)"
 
 **NOTE:** If your machine has a GPU with CUDA Compute Capability 3.5 or higher and 
 you have [CUDA 11.2](https://developer.nvidia.com/cuda-11.2-download-archive) plus 
-[cuDNN 8.1.0](https://developer.nvidia.com/cudnn) installed in your system, then you should install:
-
-```bash
-pip3 install --user tensorflow==2.10.0
-```
-
-to take advantage of hardware acceleration. You can test that your GPU is visible in TensorFlow
+[cuDNN 8.1.0](https://developer.nvidia.com/cudnn) installed in your system, then you can 
+take advantage of hardware acceleration. You can test that your GPU is visible in TensorFlow
 by running the following commands on a Python shell:
 
 ```python
@@ -169,8 +164,8 @@ by running the following commands on a Python shell:
 The function should return True if TensorFlow can access your GPU. If the function
 returns False, check the errors that are printed in the shell. Common errors include
 not having Cuda 11.2 installed in the system but a different version, not having CuDNN
-installed for Cuda 11.2, and not having CUDA system variables setup in your environment.
-For instance, important CUDA system variables include:
+installed for Cuda 11.2, and not having CUDA system variables setup in your linux environment.
+For instance, important CUDA system variables that should generally be in your `.bashrc` include:
 
 ```bash
 export PATH=$PATH:/usr/local/cuda-11.2/bin
