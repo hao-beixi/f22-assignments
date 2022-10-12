@@ -31,7 +31,7 @@ In this part of the assignment, you should think about how to implement a partic
 
 ### Questions / Tasks
 
-- **V-1.** Would a particle filter be advantageous over a Kalman Filter for tracking your chosen object from Part IV of this assignment? Explain in your report why or why not you expect a particle filter to be advantageous.
+- **V-1.** Would a particle filter be advantageous over a Kalman Filter for tracking the red ball used throughout this assignment? Explain in your report why or why not you expect a particle filter to be advantageous.
 
 - **V-2.** If you were to implement a particle filter for tracking your object in Part IV, can you use the same transition (motion) model as in your Kalman Filter implementation? Do you need to modify it in any way? Explain in your report.
 
