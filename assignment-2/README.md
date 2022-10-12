@@ -101,7 +101,7 @@ Students taking CPSC-459 will be evaluated over 180 pts. Those taking CPSC-559, 
 
 **Note on Part II of the assignment:** Part II provides extra credit for those at the top of the leaderboard in Gradescope.
 The extra credit (2 pts) will be counted for the final course grade 
-(over 100 pts for this assignment). 
+(beyond whatever points students get for this assignment). 
 
 ## Setup
 Before you start implementing or answering questions for this assignment, please
