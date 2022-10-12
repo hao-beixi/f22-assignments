@@ -69,10 +69,12 @@ class RunPolicyNode(object):
                              msg.position[joint3_idx],
                              msg.position[joint4_idx]]
         
-    def compute_joints_position(self, msg):
+    def compute_joints_position(self, msg, joint1, joint3):
         """
         Helper function to compute the required motion to make the robot's camera look towards the target
         :param msg: target message that was received by the target callback
+        :param joint1: current joint 1 position
+        :param joint3: current joint 3 position
         :return: tuple with new joint positions for joint1 and joint3, or None if the computation failed
         """
 
@@ -96,7 +98,9 @@ class RunPolicyNode(object):
             return
 
         # compute the required motion to make the robot look towards the target
-        joint_positions = self.compute_joints_position(msg)
+        joint3 = self.current_pose[2]
+        joint1 = self.current_pose[0]
+        joint_positions = self.compute_joints_position(msg, joint1, joint3)
         if joint_positions is None:
             # we are done. we did not get a solution
             rospy.logwarn("The compute_joints_position() function returned None. Failed to command the robot.")
