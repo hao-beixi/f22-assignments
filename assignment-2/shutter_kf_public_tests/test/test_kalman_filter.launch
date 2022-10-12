@@ -1,0 +1,6 @@
+<launch>
+
+    <!-- run tests -->
+    <test test-name="test_kalman_filter" pkg="shutter_kf_public_tests" type="test_kalman_filter.py"/>
+
+</launch>

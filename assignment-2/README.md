@@ -635,7 +635,16 @@ as an input argument.
 
     <img src="docs/shutter_noisy_filtering.png" width="480"/>
 
-    **How much should you tune your filter?** To help you answer this question, we have included a [test](shutter_kf_public_tests/test/test_filter_quality.py) that 
+    **NOTE 1:** This assignment includes the
+    [shutter_kf_public_tests/test/test_kalman_filter.py](shutter_kf_public_tests/test/test_kalman_filter.py) test script to check that the
+    dimensions of the matrices used in your kalman filter are all as expected
+    in your final assignment submission. You can run this test as follows:
+
+    ```bash
+    $ rostest shutter_kf_public_tests test_kalman_filter.launch
+    ```
+
+    **NOTE 2: How much should you tune your filter?** To help you answer this question, we have included a [test](shutter_kf_public_tests/test/test_filter_quality.py) that 
     measures the average L2 error with respect to the true position of the target. The test passes if 
     the average error is less than 0.04 meters. You can run the test as follows:
 
