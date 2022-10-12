@@ -26,16 +26,15 @@ class RunPolicyNode(object):
         # TODO - complete the line below to load up your model and create any necessary class instance variables
         self.model = ...
 
-        # joint values
-        self.joint1 = None
-        self.joint3 = None
+        # joint values        
+        self.current_pose = None #[0.0, 0.0, 0.0, 0.0]
+
 
         # get robot model
         self.robot = URDF.from_parameter_server()
 
-        # joint publishers
-        self.joint1_pub = rospy.Publisher('/joint_1/command', Float64, queue_size=5)    # command for base rotation
-        self.joint3_pub = rospy.Publisher('/joint_3/command', Float64, queue_size=5)    # command for robot tilt
+        # joint publisher
+        self.joint_pub = rospy.Publisher("/unity_joint_group_controller/command", Float64MultiArray, queue_size=5)
 
         # joint subscriber
         rospy.Subscriber('/joint_states', JointState, self.joints_callback, queue_size=5)
@@ -49,17 +48,26 @@ class RunPolicyNode(object):
         :param msg: joint state
         """
         joint1_idx = -1
+        joint2_idx = -1
         joint3_idx = -1
+        joint4_idx = -1
         for i in range(len(msg.name)):
             if msg.name[i] == 'joint_1':
                 joint1_idx = i
+            elif msg.name[i] == 'joint_2':
+                joint2_idx = i
             elif msg.name[i] == 'joint_3':
                 joint3_idx = i
-        assert joint1_idx >= 0 and joint3_idx > 0, \
-            "Missing joints from joint state! joint1 = {}, joint3 = {}".format(joint1_idx, joint3_idx)
-        self.joint1 = msg.position[joint1_idx]
-        self.joint3 = msg.position[joint3_idx]
-
+            elif msg.name[i] == 'joint_4':
+                joint4_idx = i
+        assert joint1_idx >= 0 and joint2_idx >= 0 and joint3_idx >= 0 and joint4_idx >= 0, \
+            "Missing joints from joint state! joint1 = {}, joint2 = {}, joint3 = {}, joint4 = {}".\
+                format(joint1_idx, joint2_idx, joint3_idx, joint4_idx)
+        self.current_pose = [msg.position[joint1_idx],
+                             msg.position[joint2_idx],
+                             msg.position[joint3_idx],
+                             msg.position[joint4_idx]]
+        
     def compute_joints_position(self, msg):
         """
         Helper function to compute the required motion to make the robot's camera look towards the target
@@ -76,19 +84,19 @@ class RunPolicyNode(object):
         Target callback
         :param msg: target message
         """
+        if self.current_pose is None:
+            rospy.logwarn("Joint positions are unknown. Waiting to receive joint states.")
+            return
+        
         # check that the data is consistent with our model and that we have current joint information...
         if msg.header.frame_id != "base_footprint":
             rospy.logerr("Expected the input target to be in the frame 'base_footprint' but got the {} frame instead. "
                          "Failed to command the robot".format(msg.header.frame_id))
             return
 
-        if self.joint1 is None:
-            rospy.logwarn("Joint 1 is unknown. Waiting to receive joint states.")
-            return
-
         # compute the required motion to make the robot look towards the target
-        joint_angles = self.compute_joints_position(msg)
-        if joint_angles is None:
+        joint_positions = self.compute_joints_position(msg)
+        if joint_positions is None:
             # we are done. we did not get a solution
             rospy.logwarn("The compute_joints_position() function returned None. Failed to command the robot.")
             return
@@ -97,8 +105,9 @@ class RunPolicyNode(object):
             new_j1, new_j3 = joint_angles
 
         # publish command
-        self.joint1_pub.publish(Float64(new_j1))
-        self.joint3_pub.publish(Float64(new_j3))
+        msg = Float64MultiArray()
+        msg.data = [float(new_j1), float(0.0), float(new_j3), float(0.0)]
+        self.joint_pub.publish(msg)
 
 
 if __name__ == '__main__':
