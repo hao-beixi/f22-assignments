@@ -9,8 +9,8 @@ The RealSense gives Shutter egocentric perception along the *eye in hand* paradi
 
 The [RealSense ROS wrapper](https://github.com/IntelRealSense/realsense-ros) is installed via `apt-get` on the course laptops.
 The following packages are necessary:
-    + `ros-noetic-realsense2-camera`
-    + `ros-noetic-realsense2-description`
++ `ros-noetic-realsense2-camera`
++ `ros-noetic-realsense2-description`
 
 You can verify that the packages are installed with the command and expected output:
 ```
