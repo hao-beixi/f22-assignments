@@ -12,14 +12,11 @@ This is the second assignment for Yale's CPSC-459/559 Building Interactive Machi
        * [Training on Google Cloud](#training-on-google-cloud)
     * [Deliverables](#deliverables)
     * [Evaluation](#evaluation)
-    * [Further Reading](#further-reading)
 * [Setup](#setup)
 * [Part I. Approximating a Non-Linear Function](#part-i-approximating-a-non-linear-function)
-    * [Questions/Tasks](#questionstasks)
-* [Part II. Building a Face Classifier](#part-ii-building-a-face-classifier)
-    * [Questions / Tasks](#questions--tasks-1)
-* [Part III. Imitation Learning (2 extra points)](#part-iii-imitation-learning-2-extra-points)
-     * [Questions / Tasks](#questions--tasks-1)
+* [Part II. Imitation Learning (2 extra points)](#part-ii-imitation-learning-2-potential-extra-points)
+* [Part III. Real-Time Filtering](#part-iii-real-time-filtering)
+* [Parts IV and V](#parts-iv-and-v)
 
 
 ## Introduction 
