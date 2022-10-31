@@ -499,13 +499,11 @@ to load up your model from disk using the model file path and normalization para
     ```
     The test will output the `~/.ros/test_policy_output.txt` file with: trial number, the target's x,y,z coordinates,
     the difference (in radians) between the predicted joint_1 and joint_3 positions and the expert's output, and
-    and acceptable boolean value indicating if both differences are less than 0.00872665 radians (0.5 degrees).
+    and acceptable boolean value indicating if both differences are less than 0.0261799 radians (1.5 degrees).
   
     **NOTE 2:** When you submit your code to Gradescope, your model files will be downloaded from Google Drive automatically
-    and tested on the virtual robot on 100 trials. The number of trials for which you get an acceptable output (as 
-    defined above) will set 50% of your grade for this part of the assignment. The other 50% will be based on
-    whether your training script runs as indicated in Part II-1 and 
-    your model can be downloaded successfully from Google Drive for testing.
+    and tested on the virtual robot on 20 trials. The number of trials for which you get an acceptable output (as 
+    defined above) will set 50% of your grade for this part of the assignment. 
     
     **NOTE 3:** The student(s) with the minimum average error: `avg(diff_j1 + diff_j3)` up to 3 point precision
     will receive 2 extra points in their final course grade. Multiple submissions to this assignment are allowed
