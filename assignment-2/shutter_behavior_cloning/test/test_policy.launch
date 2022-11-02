@@ -35,7 +35,7 @@
     </group>
 
     <!-- run test trials and output log file to ~/.ros/test_policy_output.txt -->
-    <test test-name="test_policy" pkg="shutter_behavior_cloning" type="test_policy.py" time-limit="180.0">
+    <test test-name="test_policy" pkg="shutter_behavior_cloning" type="test_policy.py" time-limit="530.0">
         <param name="publish_marker" value="$(arg run_rviz)"/>
     </test>
 
