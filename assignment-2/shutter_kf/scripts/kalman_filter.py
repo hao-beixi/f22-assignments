@@ -29,8 +29,8 @@ def KF_predict_step(mu, Sigma, A, R):
 def KF_measurement_update_step(pred_mu, pred_Sigma, z, C, Q):
     """
     Correction step for the kalman filter
-    :param pred_mu: predicted mean for the state (from KF_predict_step). Should be a 6x1 vector.
-    :param pred_Sigma: predicted covariance for the state (from KF_predict_step). Should be a 6x6 matrix.
+    :param pred_mu: predicted mean for the state (from KF_predict_step). Should be a 9x1 vector.
+    :param pred_Sigma: predicted covariance for the state (from KF_predict_step). Should be a 9x9 matrix.
     :param z: measurement.
     :param C: matrix that transforms the state into measurement by Cx.
     :param Q: covariance for the noise of the observation or measurement model.
