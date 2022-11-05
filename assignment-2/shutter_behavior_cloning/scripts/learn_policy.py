@@ -111,6 +111,7 @@ def build_nonlinear_model(num_inputs):
 
     model = tf.keras.models.Model(inputs=input, outputs=output, name="monkey_model")
     model.save('my_model.h5')
+    model.save_weights('my_weights.h5')
     return model
 
 
@@ -414,11 +415,10 @@ def main(epochs, lr, batch_size, input, target):
     #plot_test_predictions(test_input, test_target, predicted_targets, title="Predictions")
 
 
-
 if __name__ == "__main__":
     features, targets = train_utils.load_data(str(sys.argv[1]))
-    batch_size = 100
-    epochs = 600
-    lr = 0.01
+    batch_size = 10
+    epochs = 200
+    lr = 0.00001
 
     main(epochs, lr, batch_size, features, targets)

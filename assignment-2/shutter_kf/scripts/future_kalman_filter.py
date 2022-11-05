@@ -5,6 +5,7 @@ import queue
 import cv2
 import numpy as np
 import rospy
+import tf2_ros
 from shutter_lookat.msg import Target
 from geometry_msgs.msg import PoseStamped
 from visualization_msgs.msg import Marker, MarkerArray
@@ -26,7 +27,9 @@ def KF_predict_step(mu, Sigma, A, R):
 
     predicted_mu = np.dot(A, mu)
 
-    predicted_sigma = np.dot(A, predicted_mu) + R
+    first_term = np.dor(A, Sigma)
+
+    predicted_sigma = np.dot(first_term, A.T) + R
 
     return predicted_mu, predicted_Sigma
 
@@ -43,6 +46,11 @@ def KF_measurement_update_step(pred_mu, pred_Sigma, z, C, Q):
     """
     # TODO. Complete. Set the corrected_mu and corrected_Sigma variables according to the Kalman Filter's measurement update step.
 
+    k = np.dot(p.dot(pred_Sigma, C.T), np.linalg.inv(np.dot(np,dot(C, pred_Sigma), C.T) + Q.t))
+    corrected_mu = pred_mu + k * (z - np.dot(C, pred_mu))
+    item = np.dot(k, c)
+    corrected_Sigma = np.dot((np.identity(item.ndim) - item), pred_Sigma)
+    
     return corrected_mu, corrected_Sigma
 
 
@@ -84,12 +92,16 @@ class KalmanFilterNode(object):
         self.tracked_positions = queue.Queue(50)           # FIFO queue of tracked positions (for visualization)
         last_time = None                                   # Last time-stamp of when a filter update was done
 
+        self.publish_rate = 30
+
         # Publishers
         self.pub_filtered = rospy.Publisher("/filtered_target", PoseStamped, queue_size=5)
         self.pub_markers = rospy.Publisher("/filtered_markers", MarkerArray, queue_size=5)
 
         # Subscribers
         self.obs_sub = rospy.Subscriber("/target", Target, self.obs_callback, queue_size=5)
+        
+
 
         # Main loop
         while not rospy.is_shutdown():
