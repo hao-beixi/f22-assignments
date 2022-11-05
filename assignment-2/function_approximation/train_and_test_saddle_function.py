@@ -69,8 +69,27 @@ def build_nonlinear_model(num_inputs):
     :param num_inputs: number of input features for the model
     :return: Keras model
     """
-    # TO-DO: Complete. Remove the None line below, define your model, and return it.
-    return None
+    input = tf.keras.layers.Input(shape=(num_inputs,), name="inputs")
+
+    hidden1 = tf.keras.layers.Dense(256, use_bias=True, activation=tf.nn.relu)(input)
+
+    hidden2 = tf.keras.layers.Dense(128, use_bias=True, activation=tf.nn.relu)(hidden1)
+
+    hidden3 = tf.keras.layers.Dense(128, use_bias=True, activation=tf.nn.relu)(hidden2)
+
+    hidden4 = tf.keras.layers.Dense(128, use_bias=True, activation=tf.nn.relu)(hidden3)
+
+    hidden5 = tf.keras.layers.Dense(128, use_bias=True, activation=tf.nn.relu)(hidden4)
+
+    hidden6 = tf.keras.layers.Dense(64, use_bias=True, activation=tf.nn.relu)(hidden5)
+
+    hidden7 = tf.keras.layers.Dense(64, use_bias=True, activation=tf.nn.relu)(hidden6)
+
+
+    output = tf.keras.layers.Dense(1, use_bias=True)(hidden7)
+
+    model = tf.keras.models.Model(inputs=input, outputs=output, name="monkey_model")
+    return model
 
 
 def train_model(model, train_input, train_target, val_input, val_target, input_mean, input_stdev,
@@ -112,7 +131,7 @@ def train_model(model, train_input, train_target, val_input, val_target, input_m
                                                             mode='auto',
                                                             save_freq=1)
 
-    # do training for the specified number of epochs and with the given batch size
+    # do training for thfe specified number of epochs and with the given batch size
     model.fit(norm_train_input, train_target, epochs=epochs, batch_size=batch_size,
               validation_data=(norm_val_input, val_target),
               callbacks=[tbCallBack, checkpointCallBack]) # add this extra parameter to the fit function
@@ -223,14 +242,22 @@ if __name__ == "__main__":
                         action="store_true")
     parser.add_argument("--build_fn", help="model to train (e.g., 'linear')",
                         type=str, default="linear")
+    parser.add_argument("--load_model", help="path to the model",
+                        type=str, default="")
     args = parser.parse_args()
 
     # define the model function that we will use to assemble the Neural Network
     if args.build_fn == "linear":
         build_fn = build_linear_model # function that builds linear model
+    elif args.build_fn == "nonlinear":
+        build_fn = build_nonlinear_model # function that builds non-linear model
     else:
         print("Invalid build function name {}".format(args.build_fn))
         sys.exit(1)
+
+    # load model (and thus, ignore prior build function)
+    if len(args.load_model) > 0:
+        build_fn = lambda x : tf.keras.models.load_model(args.load_model, compile=False)
 
     # run the main function
     main(args.n, args.epochs, args.lr, args.visualize_training_data, build_fn=build_fn, batch_size=args.batch_size)
