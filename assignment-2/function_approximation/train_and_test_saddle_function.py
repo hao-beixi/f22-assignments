@@ -99,7 +99,23 @@ def train_model(model, train_input, train_target, val_input, val_target, input_m
                  metrics=['mae'])
 
     # TODO - Create callbacks for saving checkpoints and visualizing loss on TensorBoard
+    # tensorboard callback
+    logs_dir = 'logs/log_{}'.format(datetime.datetime.now().strftime("%m-%d-%Y-%H-%M"))
+    tbCallBack = tf.keras.callbacks.TensorBoard(log_dir=logs_dir, write_graph=True)
 
+    # save checkpoint callback
+    checkpointCallBack = tf.keras.callbacks.ModelCheckpoint(os.path.join(logs_dir,'best_monkey_weights.h5'),
+                                                            monitor='mae',
+                                                            verbose=0,
+                                                            save_best_only=True,
+                                                            save_weights_only=False,
+                                                            mode='auto',
+                                                            save_freq=1)
+
+    # do training for the specified number of epochs and with the given batch size
+    model.fit(norm_train_input, train_target, epochs=epochs, batch_size=batch_size,
+              validation_data=(norm_val_input, val_target),
+              callbacks=[tbCallBack, checkpointCallBack]) # add this extra parameter to the fit function
     # do training for the specified number of epochs and with the given batch size
     # TODO - Add callbacks to fit funciton
     model.fit(norm_train_input, train_target, epochs=epochs, batch_size=batch_size,
